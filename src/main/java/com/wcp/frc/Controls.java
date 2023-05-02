@@ -167,9 +167,6 @@ public class Controls {
 
 
 
-        if (driverAButton) {
-
-        }
         
         if (coDriverLeftY > .2&&scores.sideElvator>Constants.SideElevatorConstants.MAX_DOWN-210) {
             scores.sideElvator -= 200;
