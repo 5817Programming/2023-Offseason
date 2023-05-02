@@ -10,6 +10,7 @@ import com.wcp.frc.Constants;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Scores extends SubsystemBase {
+  private State currentState = State.ZERO;
   public double armOffset = 0;
   public double sideElvator = 0;
 
@@ -41,6 +42,12 @@ public class Scores extends SubsystemBase {
     this.Cube = Cube;
     Logger.getInstance().recordOutput("heighst", height);
 
+  }
+  public enum State{
+    HIGH, MID, LOW, ZERO, CHUTE, HUMAN;
+  }
+  public void setState(State newState){
+      currentState = newState;
   }
 
   public void score(boolean coDriverA, boolean coDriverB, boolean coDriverX, boolean coDriverY, 
