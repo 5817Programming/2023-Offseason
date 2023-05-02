@@ -101,15 +101,15 @@ public class Scores extends SubsystemBase {
       hooman();
     }
   }
-  public static void setElevator(State state){
+  public void setElevator(State state){
     currentState = state;
     setElevator();
   }
-  public static void setElevator(){
+  public void setElevator(){
     selectPreset();
     goToPreset();
   }
-  public static void goToPreset(){
+  public void goToPreset(){
 
     if ((arm.getEncoder()/armDesired)<1.1){
       armPercent = arm.getEncoder()/armDesired;
