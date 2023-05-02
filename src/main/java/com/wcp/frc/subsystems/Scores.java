@@ -142,59 +142,55 @@ public class Scores extends SubsystemBase {
     // armOffset=0;
   }
 
-  public void hooman() {
-    sideElevatorDesired = (Constants.SideElevatorConstants.HOOMAN);// go to set offset based off vision
+  public void hoomanCube() {
+    sideElevatorDesired = (Constants.SideElevatorConstants.HOOMAN);
     elevatorDesired = (Constants.ElevatorConstants.HOOMAN);
-      armDesired = (Constants.ArmConstants.HOOMAN-armOffset);
-   
-
+    armDesired = (Constants.ArmConstants.HOOMAN-armOffset);
+  }  
+  
+  public void hoomanCone() {
+    sideElevatorDesired = (Constants.SideElevatorConstants.HOOMAN);
+    elevatorDesired = (Constants.ElevatorConstants.HOOMAN);
+    armDesired = (Constants.ArmConstants.HOOMAN-armOffset);
   }
 
+
   public void scoreLowCone() {
-    sideElevatorDesired  = (Constants.SideElevatorConstants.MAX_DOWN);// go to set offset based off vision
+    sideElevatorDesired  = (Constants.SideElevatorConstants.MAX_DOWN);
     elevatorDesired = (Constants.ElevatorConstants.LOW_CONE);
     armDesired = (Constants.ArmConstants.LOW_SCORE_CONE - armOffset);
-
   }
  
 
   public void scoreMidCone() {
-    sideElevatorDesired  = (Constants.SideElevatorConstants.MAX_DOWN);// go to set offset based off vision
+    sideElevatorDesired  = (Constants.SideElevatorConstants.MAX_DOWN);
     elevatorDesired = (Constants.ElevatorConstants.MID_CONE);
     armDesired = (Constants.ArmConstants.MIDDLE_CONE - armOffset);
-
   }
 
-  // (((vision.range)/12)-3)*(2048/Constants.sideelevatorgearratio)*Constants.sideelevatorrotationsperfoot
   public void scoreHighCone() {
-    sideElevatorDesired  = (Constants.SideElevatorConstants.HIGH_CONE);// goto set offset based off vision
+    sideElevatorDesired  = (Constants.SideElevatorConstants.HIGH_CONE);
     elevatorDesired = (Constants.ElevatorConstants.HIGH_CONE);
-
     armDesired = (Constants.ArmConstants.HIGH_CONE - armOffset);
-
   }
+
   public void scoreLowCube() {
-    sideElevatorDesired  = (Constants.SideElevatorConstants.MAX_DOWN);// go to set offset based off vision
+    sideElevatorDesired  = (Constants.SideElevatorConstants.MAX_DOWN);
     elevatorDesired = (Constants.ElevatorConstants.LOW_CUBE);
     armDesired = (Constants.ArmConstants.LOW_SCORE_CUBE - armOffset);
-
   }
  
 
   public void scoreMidCube() {
-    sideElevatorDesired  = (Constants.SideElevatorConstants.MAX_DOWN);// go to set offset based off vision
+    sideElevatorDesired  = (Constants.SideElevatorConstants.MAX_DOWN);
     elevatorDesired = (Constants.ElevatorConstants.MID_CUBE);
     armDesired = (Constants.ArmConstants.MIDDLE_CUBE - armOffset);
-
   }
 
-  // (((vision.range)/12)-3)*(2048/Constants.sideelevatorgearratio)*Constants.sideelevatorrotationsperfoot
   public void scoreHighCube() {
-    sideElevatorDesired  = (Constants.SideElevatorConstants.HIGH_CUBE);// goto set offset based off vision
+    sideElevatorDesired  = (Constants.SideElevatorConstants.HIGH_CUBE);
     elevatorDesired = (Constants.ElevatorConstants.HIGH_CUBE);
-
     armDesired = (Constants.ArmConstants.HIGH_CUBE - armOffset);
-
   }
 
   public void pickup() {
@@ -203,7 +199,6 @@ public class Scores extends SubsystemBase {
     elevatorDesired = (Constants.ElevatorConstants.PICKUP - elevatorOffset);
     armDesired = (Constants.ArmConstants.PICKUP);
 
-    // Use addRequirements() here to declare subsystem dependencies.
   }
 
   public void zero() {
@@ -212,6 +207,5 @@ public class Scores extends SubsystemBase {
     elevatorDesired = (Constants.ElevatorConstants.ZERO);
     armDesired = (Constants.ArmConstants.ZERO+500);
 
-    // Use addRequirements() here to declare subsystem dependencies.
   }
 }
