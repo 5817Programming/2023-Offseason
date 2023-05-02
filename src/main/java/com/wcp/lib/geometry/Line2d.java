@@ -124,12 +124,19 @@ public Translation2d getInterSection(Line otherLine){
         double b2 = otherLine.x1() - otherLine.x2();
         double c2 =  (a2*otherLine.x1()) + (b2*otherLine.y1());
 
-        double det = (a1 * b2) - (a2 * b1)
+        double det = (a1 * b2) - (a2 * b1);
 
             double x = (b2 * c1 - b1 * c2) / det;
             double y = (a1 * c2 - a2 * c1) / det;
             return new Translation2d(x,y);
         }
+
+public double midPointX(){
+    return ((RightPoint.x() - LeftPoint.x())/2) + LeftPoint.x();
+}
+public double midPointY(){
+    return ((TopPoint.y() - BottomPoint.y())/2) + BottomPoint.y();
+}
     }
 
     
