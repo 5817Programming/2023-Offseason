@@ -52,7 +52,7 @@ public class Scores extends SubsystemBase {
 
   public void setHeight(boolean coDriverA, boolean coDriverB, boolean coDriverX, boolean coDriverY, 
   boolean coDriverBackButton, boolean coDriverLeftStickDown, boolean coDriverLeftBumperTAP, boolean Cube) {
-    
+  
     if (coDriverA) {
       currentState = State.LOW;
     } else if (coDriverB) {
@@ -110,6 +110,7 @@ public class Scores extends SubsystemBase {
     goToPreset();
   }
   public static void goToPreset(){
+
     if ((arm.getEncoder()/armDesired)<1.1){
       armPercent = arm.getEncoder()/armDesired;
     }
@@ -124,14 +125,12 @@ public class Scores extends SubsystemBase {
     }else{
       elevatorSetPoint = elevatorDesired;
       sideElevatorSetPoint = sideElevatorDesired;
-      armSetPoint =armDesired/(Math.pow(elevatorPercent, 4));
+      armSetPoint = armDesired/(Math.pow(elevatorPercent, 4));
     }
 
     elevator.elevator(elevatorSetPoint);
     sideElevator.elevator(sideElevatorSetPoint);
     arm.setMotionMagic(armSetPoint);
-
-
   }
 
  public void hold() {
