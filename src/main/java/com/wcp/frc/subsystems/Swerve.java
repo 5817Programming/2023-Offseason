@@ -201,8 +201,6 @@ public class Swerve extends Subsystem {
         
     }
 
-    
-
     @Override
     public void readPeriodicInputs() {
         modules.forEach((m) -> {m.readPeriodicInputs();});
