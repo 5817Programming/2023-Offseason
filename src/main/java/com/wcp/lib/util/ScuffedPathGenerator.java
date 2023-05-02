@@ -31,6 +31,7 @@ import org.littletonrobotics.junction.Logger;
 
 /** Custom PathPlanner version of SwerveControllerCommand */
 public class ScuffedPathGenerator extends SubsystemBase {
+  boolean noColosions;
   List<List<Translation2d>> objectContraints = new ArrayList();
   
   public static ScuffedPathGenerator getInstance() {// if doesnt have an instance of swerve will make a new one
@@ -41,14 +42,15 @@ public class ScuffedPathGenerator extends SubsystemBase {
 
 public static PathPlannerTrajectory generateAvoidedPath(
       PathConstraints constraints,
-      PathPoint point1,
-      PathPoint point2,
-      PathPoint... points) {
-    List<PathPoint> pointsList = new ArrayList<>();
+      Translation2d point1,
+      Translation2d point2,
+      Translation2d... points) {
+    List<Translation2d> pointsList = new ArrayList<>();
     pointsList.add(point1);
     pointsList.add(point2);
     pointsList.addAll(List.of(points));
-    for(int i = 0; i < pointsList.size(); i ++){
+    for(int i = 0; i < pointsList.size()-1; i ++){
+        Line2d testLine = new Line2d(pointsList.get(i), pointsList.get(i+1));
 
     }
     return generatePath(constraints, reversed, pointsList);
