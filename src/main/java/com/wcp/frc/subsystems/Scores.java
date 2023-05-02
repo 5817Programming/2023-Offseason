@@ -12,9 +12,18 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class Scores extends SubsystemBase {
   private State currentState = State.ZERO;
   public double armOffset = 0;
-  public double sideElvator = 0;
-
   public double elevatorOffset =  0;
+  public boolean Cube= false;
+  public double elevatorPercent;
+  public double armPercent;
+  public double elevatorDesired=Constants.ElevatorConstants.ZERO;
+  public double sideElevatorDesired=Constants.SideElevatorConstants.ZERO;
+  public double armDesired=Constants.ArmConstants.ZERO;
+  public double elevatorSetPoint=Constants.ElevatorConstants.ZERO;
+  public double sideElevatorSetPoint=Constants.SideElevatorConstants.ZERO;
+  public double armSetPoint=Constants.ArmConstants.ZERO;
+  
+  
   public boolean Cube= true;
   
 
@@ -32,20 +41,12 @@ public class Scores extends SubsystemBase {
   // Vision vision;
   Elevator elevator = new Elevator();
   SideElevator sideElevator = new SideElevator();
-
   Arm arm = new Arm();
 
-  double height = Constants.zero;
-  Constants constants;
-  public void setHeight(double height, boolean Cube){
-    this.height = height;
-    this.Cube = Cube;
-    Logger.getInstance().recordOutput("heighst", height);
-
-  }
   public enum State{
     HIGH, MID, LOW, ZERO, CHUTE, HUMAN;
   }
+
   public void setHeight(State newState){
       currentState = newState;
   }
@@ -56,7 +57,7 @@ public class Scores extends SubsystemBase {
     if (coDriverA) {
       currentState = State.LOW;
     } else if (coDriverB) {
-      currentState = State.LOW;
+      currentState = State.MID;
     } else if (coDriverX) {
       currentState = State.HOOMAN;
     } else if (coDriverY) {
@@ -71,34 +72,66 @@ public class Scores extends SubsystemBase {
 
   public static void selectPreset(){
     if(curentState == State.HIGH&&!CUBE){
-      
+      scoreHighCone();
     }
     if(curentState == State.MID&&!CUBE){
-      
+      scoreMidCone();
     }
     if(curentState == State.LOW&&!CUBE){
-      
+      scoreLowCone();
     }
     if(curentState == State.HIGH&&CUBE){
-      
-    }
+      scoreHighCube();
+    } 
     if(curentState == State.MID&&CUBE){
-      
+      scoreMidCube();
     }
     if(curentState == State.LOW&&CUBE){
-      
+      scoreLowCube();
     }
     if(currentState == State.CHUTE){
-
+      pickup();
     }
-    if(currentState == )
+    if(currentState == State.ZERO){
+      zero();
+    }
+    if(currentState == State.HUMAN&&!CUBE){
+      hooman();
+    }
+    if(currentState == State.HUMAN&&CUBE){
+      hooman();
+    }
   }
   public static void setElevator(State state){
     currentState = state;
+    setElevator();
+  }
+  public static void setElevator(){
     selectPreset();
-
+    goToPreset();
   }
   public static void goToPreset(){
+    if ((arm.getEncoder()/armDesired)<1.1){
+      armPercent = arm.getEncoder()/armDesired;
+    }
+    else if ((elevator.getEncoder()/height)>1.1){
+      armPercent = armDesired/arm.getEncoder();
+    }
+    if(elevatorDesired>elevator.getEncoder()){
+      elevatorSetPoint = elevatorDesired;
+      sideElevatorSetPoint = sideElevatorDesired;
+      armSetPoint = (Math.pow(elevatorPercent, 4))*armDesired;
+     
+    }else{
+      elevatorSetPoint = elevatorDesired;
+      sideElevatorSetPoint = sideElevatorDesired;
+      armSetPoint =armDesired/(Math.pow(elevatorPercent, 4));
+    }
+
+    elevator.elevator(elevatorSetPoint);
+    sideElevator.elevator(sideElevatorSetPoint);
+    arm.setMotionMagic(armSetPoint);
+
 
   }
 
