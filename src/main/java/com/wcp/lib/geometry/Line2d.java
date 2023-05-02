@@ -137,8 +137,38 @@ public double midPointX(){
 public double midPointY(){
     return ((TopPoint.y() - BottomPoint.y())/2) + BottomPoint.y();
 }
-    }
+    
 
+public boolean intersectUpper(Line otherLine){
+    if(intersectsWith(otherLine)){
+        if(getInterSection(otherLine).y()>midPointY()){
+        return true;
+        }
+        else{
+          return false;
+        }
+    }
+    else{
+        return false;
+    }
+    
+}
+public boolean intersectRighter(Line otherLine){
+    if(intersectsWith(otherLine)){
+            if(getInterSection.x()>midPointX()){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+    else{
+        return false;
+    }
+}
+
+
+}
     
 
     
