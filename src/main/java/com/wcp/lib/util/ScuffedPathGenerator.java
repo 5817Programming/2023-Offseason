@@ -23,6 +23,7 @@ import org.littletonrobotics.junction.Logger;
 /** Custom PathPlanner version of SwerveControllerCommand */
 public class ScuffedPathGenerator extends SubsystemBase {
   boolean noColosions;
+  int pointIndex = 0;
   Translation2d previousPose;
   List<Line2d> objectContraints = new ArrayList();
 
@@ -42,24 +43,37 @@ public PathPlannerTrajectory generateAvoidedPath(
     pointsList.add(point1);
     pointsList.add(point2);
     PathPlannerTrajectory testTraj = PathPlanner.generatePath(constraints,pointsList);
-   for(int i=0;i < testTraj.getTotalTimeSeconds()*100; i++){
-    testLine = new Line2d(new Translation2d(testTraj.sample(i).poseMeters.getTranslation().getX(), testTraj.sample(i).poseMeters.getTranslation().getY()),
-     new Translation2d(testTraj.sample(i+1).poseMeters.getTranslation().getX(),testTraj.sample(i+1).poseMeters.getTranslation().getY()));
-   }
-    for(int j = 0; j < objectContraints.size(); j++){
-        if(testLine.intersectsWith(objectContraints.get(j))){
-            if(objectContraints.get(j).getSlope()>1){
-              if(testLine.getTop().y()>objectContraints.get(j).getTop().y()){
-                pointsList.add(pointsList.size()-2, new PathPoint(objectContraints.get(j).getTop(), new Rotation2d()));
-              }
-              else{
-
-              }
+    while(!noColosions){
+      for(double i=0; i < testTraj.getTotalTimeSeconds()*100; i++){
+        testLine = new Line2d(new Translation2d(testTraj.sample(i).poseMeters.getTranslation().getX(), testTraj.sample(i).poseMeters.getTranslation().getY()),
+        new Translation2d(testTraj.sample(i+1/100).poseMeters.getTranslation().getX(),testTraj.sample(i+1/100).poseMeters.getTranslation().getY()));
+      }
+        for(int j = 0; j < objectContraints.size(); j++){
+          Line2d lineAcrossPoints = new Line2d(new Translation2d(pointsList.get(pointIndex).position.getX(),pointsList.get(pointIndex).position.getY()), new Translation2d(pointsList.get(pointIndex+1).position.getX(),pointsList.get(pointIndex+1).position.getY()));
+            if(testLine.intersectsWith(objectContraints.get(j))){
+                if(objectContraints.get(j).getSlope()>1){
+                  if(lineAcrossPoints.getTop().y()>objectContraints.get(j).getTop().y()){
+                    pointsList.add(pointsList.size()-2, new PathPoint(objectContraints.get(j).getTop(), new Rotation2d()));
+                  }
+                  else{
+                    pointsList.add(pointsList.size()-2, new PathPoint(objectContraints.get(j).getBottom(), new Rotation2d()));
+                  }
+                }
+                else{
+                  if(lineAcrossPoints.getRight().x()>objectContraints.get(j).getRight().x()){
+                    pointsList.add(pointsList.size()-2, new PathPoint(objectContraints.get(j).getTop(), new Rotation2d()));
+                  }
+                  else{
+                    pointsList.add(pointsList.size()-2, new PathPoint(objectContraints.get(j).getBottom(), new Rotation2d()));
+                  }
+                }
+                pointIndex++;
             }
+            
         }
-    }
+      }
 
-      return new PathPlannerTrajectory();
+      return PathPlanner.generatePath(constraints, pointsList);
   }
 public void insertObject(Line2d line1, Line2d line2, Line2d... lines){
   objectContraints.add(line1.extend(Constants.mRobotHypot));
