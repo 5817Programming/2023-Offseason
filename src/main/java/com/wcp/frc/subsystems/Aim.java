@@ -112,7 +112,7 @@ public class Aim extends SubsystemBase {
     double dt = currentTime-lastTimeStamp;
     xError = xPID.calculate(Robotx-targetTranslation2d.getX(), dt);
     yError = yPID.calculate(Roboty-targetTranslation2d.getY(), dt);
-    if(Math.abs(Robotx-targetTranslation2d.getX())<.01&&Math.abs(Roboty-targetTranslation2d.getY())<.01){
+    if(Math.abs(Robotx-targetTranslation2d.getX())>.01&&Math.abs(Roboty-targetTranslation2d.getY())>.01){
       swerve.Aim(new Translation2d(xError, -yError), rotation);
     }
     else{
@@ -129,10 +129,11 @@ public class Aim extends SubsystemBase {
     }
     double currentTime  = Timer.getFPGATimestamp();
     double dt = currentTime-lastTimeStamp;
-
     xError = xPID.calculate(Robotx-1.84, dt);
     yError = yPID.calculate(Roboty-Constants.scoresY.get(scoringNode), dt);
-    swerve.Aim(new Translation2d(xError, -yError), rotation);
+    if(Math.abs(xError < .02) && Math.abs(yError < .02)){
+      swerve.Aim(new Translation2d(xError, -yError), rotation);
+    }
     lastTimeStamp = currentTime;
 
   }
@@ -154,7 +155,7 @@ public class Aim extends SubsystemBase {
     if(Robotx > 2.5){
       moveTo(bestScore);
     }else{
-      goToGrid();
+      //goToGrid();
     }
       
   }
@@ -162,7 +163,7 @@ public class Aim extends SubsystemBase {
     if(Robotx < 14.02){
       moveTo(bestScore);
     }else{
-      goToGrid();
+      //goToGrid();
   }
   }
   

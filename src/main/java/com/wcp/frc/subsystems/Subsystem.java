@@ -5,7 +5,7 @@
 package com.wcp.frc.subsystems;
 
 /** Add your docs here. */
-public abstract class Subsystem {
+public abstract class Subsystem extends SubsystemBase {
     public void readPeriodicInputs() {
     }
     public void writePeriodicOutputs() {
