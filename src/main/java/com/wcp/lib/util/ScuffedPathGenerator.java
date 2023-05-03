@@ -42,36 +42,36 @@ public PathPlannerTrajectory generateAvoidedPath(
     Line2d testLine = new Line2d();
     pointsList.add(point1);
     pointsList.add(point2);
-    PathPlannerTrajectory testTraj = PathPlanner.generatePath(constraints,pointsList);
-    while(!noColosions){
-      for(double i=0; i < testTraj.getTotalTimeSeconds()*100; i++){
-        testLine = new Line2d(new Translation2d(testTraj.sample(i).poseMeters.getTranslation().getX(), testTraj.sample(i).poseMeters.getTranslation().getY()),
-        new Translation2d(testTraj.sample(i+1/100).poseMeters.getTranslation().getX(),testTraj.sample(i+1/100).poseMeters.getTranslation().getY()));
-      }
-        for(int j = 0; j < objectContraints.size(); j++){
-          Line2d lineAcrossPoints = new Line2d(new Translation2d(pointsList.get(pointIndex).position.getX(),pointsList.get(pointIndex).position.getY()), new Translation2d(pointsList.get(pointIndex+1).position.getX(),pointsList.get(pointIndex+1).position.getY()));
-            if(testLine.intersectsWith(objectContraints.get(j))){
-                if(objectContraints.get(j).getSlope()>1){
-                  if(lineAcrossPoints.getTop().y()>objectContraints.get(j).getTop().y()){
-                    pointsList.add(pointsList.size()-2, new PathPoint(objectContraints.get(j).getTop(), new Rotation2d()));
-                  }
-                  else{
-                    pointsList.add(pointsList.size()-2, new PathPoint(objectContraints.get(j).getBottom(), new Rotation2d()));
-                  }
-                }
-                else{
-                  if(lineAcrossPoints.getRight().x()>objectContraints.get(j).getRight().x()){
-                    pointsList.add(pointsList.size()-2, new PathPoint(objectContraints.get(j).getTop(), new Rotation2d()));
-                  }
-                  else{
-                    pointsList.add(pointsList.size()-2, new PathPoint(objectContraints.get(j).getBottom(), new Rotation2d()));
-                  }
-                }
-                pointIndex++;
-            }
+  //   PathPlannerTrajectory testTraj = PathPlanner.generatePath(constraints,pointsList);
+  //  // while(!noColosions){
+  //     for(double i=0; i < testTraj.getTotalTimeSeconds()*100; i++){
+  //       testLine = new Line2d(new Translation2d(testTraj.sample(i).poseMeters.getTranslation().getX(), testTraj.sample(i).poseMeters.getTranslation().getY()),
+  //       new Translation2d(testTraj.sample(i+1/100).poseMeters.getTranslation().getX(),testTraj.sample(i+1/100).poseMeters.getTranslation().getY()));
+  //     }
+  //       for(int j = 0; j < objectContraints.size(); j++){
+  //         Line2d lineAcrossPoints = new Line2d(new Translation2d(pointsList.get(pointIndex).position.getX(),pointsList.get(pointIndex).position.getY()), new Translation2d(pointsList.get(pointIndex+1).position.getX(),pointsList.get(pointIndex+1).position.getY()));
+  //           if(testLine.intersectsWith(objectContraints.get(j))){
+  //               if(objectContraints.get(j).getSlope()>1){
+  //                 if(lineAcrossPoints.getTop().y()>objectContraints.get(j).getTop().y()){
+  //                   pointsList.add(pointsList.size()-2, new PathPoint(objectContraints.get(j).getTop(), new Rotation2d()));
+  //                 }
+  //                 else{
+  //                   pointsList.add(pointsList.size()-2, new PathPoint(objectContraints.get(j).getBottom(), new Rotation2d()));
+  //                 }
+  //               }
+  //               else{
+  //                 if(lineAcrossPoints.getRight().x()>objectContraints.get(j).getRight().x()){
+  //                   pointsList.add(pointsList.size()-2, new PathPoint(objectContraints.get(j).getTop(), new Rotation2d()));
+  //                 }
+  //                 else{
+  //                   pointsList.add(pointsList.size()-2, new PathPoint(objectContraints.get(j).getBottom(), new Rotation2d()));
+  //                 }
+  //               }
+  //               pointIndex++;
+  //           }
             
-        }
-      }
+  //       }
+  //  //   }
 
       return PathPlanner.generatePath(constraints, pointsList);
   }

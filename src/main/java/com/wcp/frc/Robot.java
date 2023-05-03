@@ -131,7 +131,7 @@ public class Robot extends LoggedRobot {
       new Line2d(new Translation2d(2.8,4), new Translation2d(4.8,4)),
       new Line2d(new Translation2d(2.8,4), new Translation2d(2.8,1.52)),
       new Line2d(new Translation2d(4.8,4), new Translation2d(4.8,1.52)));
-     PathPlannerTrajectory testTraj = scuffedPathGenerator.generateAvoidedPath(new PathConstraints(4,4), new PathPoint(new Translation2d(2.09, 1.18), Rotation2d.fromDegrees(0), swerve.getPose().getRotation()) ,  new PathPoint(new Translation2d(6.17, 4.67), Rotation2d.fromDegrees(0), swerve.getPose().getRotation()));
+     PathPlannerTrajectory testTraj = scuffedPathGenerator.generateAvoidedPath(new PathConstraints(4,4), new PathPoint(new Translation2d(2.09, 1.18), Rotation2d.fromDegrees(0)) ,  new PathPoint(new Translation2d(6.17, 4.67), Rotation2d.fromDegrees(0)));
      Logger.getInstance().recordOutput("test Trajectory", testTraj);
     controls.update();
   }
