@@ -11,17 +11,17 @@ public class Line2d {
 
     protected Translation2d mPoint1;
     protected Translation2d mPoint2;
-    protected Translation2d TopPoint;
-    protected Translation2d BottomPoint;
-    protected Translation2d LeftPoint;
-    protected Translation2d RightPoint;
+    protected Translation2d mTopPoint;
+    protected Translation2d mBottomPoint;
+    protected Translation2d mLeftPoint;
+    protected Translation2d mRightPoint;
 
-    protected double x1;
-    protected double x2;
-    protected double y1;
-    protected double y2;
+    protected double mX1;
+    protected double mX2;
+    protected double mY1;
+    protected double mY2;
 
-    public Pose2d() {
+    public Line2d() {
         mPoint1 = new Translation2d();
         mPoint2 = new Translation2d();
         mTopPoint = new Translation2d();
@@ -33,21 +33,21 @@ public class Line2d {
         mY1 = 0;
         mY2 = 0;
     }
-    public Pose2d(Translation2d point1, Translation2d point2) {
+    public Line2d(Translation2d point1, Translation2d point2) {
         if(mPoint2.y() > mPoint1.y()){
-            TopPoint = point2;
-            BottomPoint = point1;
+            mTopPoint = point2;
+            mBottomPoint = point1;
         }
         else{
-            TopPoint = point1;
-            BottomPoint = point2;
+            mTopPoint = point1;
+            mBottomPoint = point2;
         }
         if(mPoint1.x() > mPoint2.x()){
-            RightPoint = point1;
-            LeftPoint = point2;
+            mRightPoint = point1;
+            mLeftPoint = point2;
         }else{
-            RightPoint = point1;
-            LeftPoint = point2;
+            mRightPoint = point1;
+            mLeftPoint = point2;
         }
 
         mPoint1 = point1;
@@ -68,19 +68,19 @@ public class Line2d {
     }
 
     public Translation2d getTop(){
-        return TopPoint;
+        return mTopPoint;
     }
 
     public Translation2d getBottom(){
-        return BottomPoint;
+        return mBottomPoint;
     }
 
     public Translation2d getRight(){
-        return RightPoint;
+        return mRightPoint;
     }
 
     public Translation2d getLeft(){
-        return RightPoint;
+        return mRightPoint;
     }
     public double x1(){
         return mX1;
@@ -95,7 +95,7 @@ public class Line2d {
         return mY2;
     }
     
-    public boolean intersectsWith(Line otherLine){
+    public boolean intersectsWith(Line2d otherLine){
         double a1 = mY2 - mY1;
         double b1 = mX1 - mX2;
         double c1 = (a1*mX1) + (b1*mY1);
@@ -103,20 +103,20 @@ public class Line2d {
         double b2 = otherLine.x1() - otherLine.x2();
         double c2 =  (a2*otherLine.x1()) + (b2*otherLine.y1());
 
-        double det = (a1 * b2) - (a2 * b1)
+        double det = (a1 * b2) - (a2 * b1);
         if(det == 0) {
             return false;
         } else{
             double x = (b2 * c1 - b1 * c2) / det;
             double y = (a1 * c2 - a2 * c1) / det;
-            if(x>=RightPoint.x() && x <= LeftPoint.x() && y >= bottomPoint.y() && y <= TopPoint.y()){
+            if(x>=mRightPoint.x() && x <= mLeftPoint.x() && y >= mBottomPoint.y() && y <= mTopPoint.y()){
                 return true;
             }else{
                 return false;
             }
         }
     }
-public Translation2d getInterSection(Line otherLine){
+public Translation2d getInterSection(Line2d otherLine){
         double a1 = mY2 - mY1;
         double b1 = mX1 - mX2;
         double c1 = (a1*mX1) + (b1*mY1);
@@ -132,14 +132,14 @@ public Translation2d getInterSection(Line otherLine){
         }
 
 public double midPointX(){
-    return ((RightPoint.x() - LeftPoint.x())/2) + LeftPoint.x();
+    return ((mRightPoint.x() - mLeftPoint.x())/2) + mLeftPoint.x();
 }
 public double midPointY(){
-    return ((TopPoint.y() - BottomPoint.y())/2) + BottomPoint.y();
+    return ((mTopPoint.y() - mBottomPoint.y())/2) + mBottomPoint.y();
 }
     
 
-public boolean intersectUpper(Line otherLine){
+public boolean intersectUpper(Line2d otherLine){
     if(intersectsWith(otherLine)){
         if(getInterSection(otherLine).y()>midPointY()){
         return true;
@@ -153,9 +153,9 @@ public boolean intersectUpper(Line otherLine){
     }
     
 }
-public boolean intersectRighter(Line otherLine){
+public boolean intersectRighter(Line2d otherLine){
     if(intersectsWith(otherLine)){
-            if(getInterSection.x()>midPointX()){
+            if(getInterSection(otherLine).x()>midPointX()){
             return true;
         }
         else{

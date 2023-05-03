@@ -6,6 +6,8 @@ package com.wcp.frc.subsystems;
 
 import com.wcp.frc.Constants;
 import com.wcp.frc.Controls;
+import com.wcp.frc.subsystems.Scores.State;
+
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
@@ -22,7 +24,7 @@ public class AutoScore extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      new InstantCommand(() -> scores.scoring()),
+      new InstantCommand(() -> scores.setHeight(State.HIGH)),
       new WaitCommand(1.5),
       new InstantCommand(() -> intake.setPercentOutput(.5)),
       new WaitCommand(.1),
