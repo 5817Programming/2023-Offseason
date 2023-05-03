@@ -37,10 +37,10 @@ public class Line2d {
         
         mPoint1 = point1;
         mX1 = point1.x();
-        mY1 = point1.x();
+        mY1 = point1.y();
 
         mPoint2 = point2;
-        mX2 = point2.y();
+        mX2 = point2.x();
         mY2 = point2.y();
         
         if(mPoint2.y() > mPoint1.y()){
@@ -116,6 +116,17 @@ public class Line2d {
             }
         }
     }
+    public Line2d extend(double extend){
+        
+        double k = Math.sqrt(Math.pow(mX2-mX1, 2) + Math.pow(mY2-mY1, 2));
+        double nTopx = mTopPoint.getX() +(mX2-mX1)/(extend*k);
+        double nTopy = mTopPoint.getY() +(mY2-mY1)/(extend*k);
+        double nBottomx = mBottomPoint.getX() - (mX2-mX1)/(extend*k);
+        double nBottomy = mBottomPoint.getY() +(mY2-mY1)/(extend*k);
+
+        
+        return new Line2d(new Translation2d(nTopx, nTopy), new Translation2d(nBottomx, nBottomy));
+    }
     public Translation2d getInterSection(Line2d otherLine){
         double a1 = mY2 - mY1;
         double b1 = mX1 - mX2;
@@ -130,6 +141,17 @@ public class Line2d {
             double y = (a1 * c2 - a2 * c1) / det;
             return new Translation2d(x,y);
         }
+
+public double getSlope(){
+    if(mX2 == mX1){
+        return 1000000000;
+    }
+    else{
+        return (mY2-mY1)/(mX2 - mX1);
+    }
+   
+}
+
 
 public double midPointX(){
     return ((mRightPoint.x() - mLeftPoint.x())/2) + mLeftPoint.x();
