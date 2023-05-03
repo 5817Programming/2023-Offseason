@@ -37,7 +37,7 @@ public class ScuffedPathGenerator extends SubsystemBase {
   List<List<Translation2d>> objectContraints = new ArrayList();
 
   private static ScuffedPathGenerator instance = null;
-  public static ScuffedPathGenerator getInstance() {// if doesnt have an instance of swerve will make a new one
+  public static ScuffedPathGenerator getInstance() {// if doesnt have an instance will make a new one
     if (instance == null)
         instance = new ScuffedPathGenerator();
     return instance;
@@ -56,14 +56,15 @@ public static PathPlannerTrajectory generateAvoidedPath(
         Line2d testLine = new Line2d(pointsList.get(i), pointsList.get(i+1));
 
     }
-    return generatePath(constraints, reversed, pointsList);
+    return generatePath(constraints, pointsList);
   }
 
-public static void insertObject(List<Translation2d> objectDimensions){
-  objectContraints.add();
-
+public void insertObject(List<Translation2d> objectDimensions){
+    objectContraints.add(objectDimensions);
 }
-public static void removeObject()
+public static void removeObject(){
+  
+}
 
 
  

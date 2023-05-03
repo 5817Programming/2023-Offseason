@@ -34,6 +34,15 @@ public class Line2d {
         mY2 = 0;
     }
     public Line2d(Translation2d point1, Translation2d point2) {
+        
+        mPoint1 = point1;
+        mX1 = point1.x();
+        mY1 = point1.x();
+
+        mPoint2 = point2;
+        mX2 = point2.y();
+        mY2 = point2.y();
+        
         if(mPoint2.y() > mPoint1.y()){
             mTopPoint = point2;
             mBottomPoint = point1;
@@ -49,15 +58,6 @@ public class Line2d {
             mRightPoint = point1;
             mLeftPoint = point2;
         }
-
-        mPoint1 = point1;
-        mX1 = point1.x();
-        mY1 = point1.x();
-
-        mPoint2 = point2;
-        mX2 = point2.y();
-        mY2 = point2.y();
-        
 
     }
     public Translation2d getPoint1(){
@@ -116,7 +116,7 @@ public class Line2d {
             }
         }
     }
-public Translation2d getInterSection(Line2d otherLine){
+    public Translation2d getInterSection(Line2d otherLine){
         double a1 = mY2 - mY1;
         double b1 = mX1 - mX2;
         double c1 = (a1*mX1) + (b1*mY1);
@@ -166,8 +166,6 @@ public boolean intersectRighter(Line2d otherLine){
         return false;
     }
 }
-
-
 }
     
 
