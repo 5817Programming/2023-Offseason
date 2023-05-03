@@ -26,6 +26,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Aim extends SubsystemBase {
   Swerve swerve;
+  boolean pathStarted;
   double distance;
   int bestScore;
   int offset= 0;
@@ -67,56 +68,60 @@ public class Aim extends SubsystemBase {
   public void goToGrid(){
     PathPlannerTrajectory toGrid;
     double rotation = 0;
-    if(Roboty>2.75){
-      if(DriverStation.getAlliance() == Alliance.Blue){
-      rotation = 180;
-    
-    toGrid = PathPlanner.generatePath(
-      new PathConstraints(4, 3), 
-      new PathPoint(swerve.getPose().getTranslation(), Rotation2d.fromDegrees(0), swerve.getPose().getRotation()),
-      new PathPoint(new Translation2d(5.35, 4.48), Rotation2d.fromDegrees(0), swerve.getPose().getRotation()),
-      new PathPoint(new Translation2d(2.39, 4.48), Rotation2d.fromDegrees(0), swerve.getPose().getRotation())
-      );
-
-    }else{
+    if(!pathStarted){
+      if(Roboty>2.75){
+        if(DriverStation.getAlliance() == Alliance.Blue){
+        rotation = 180;
+      
       toGrid = PathPlanner.generatePath(
-      new PathConstraints(4, 3), 
-      new PathPoint(swerve.getPose().getTranslation(), Rotation2d.fromDegrees(0), swerve.getPose().getRotation()),
-      new PathPoint(new Translation2d(11.24, 4.48), Rotation2d.fromDegrees(0), swerve.getPose().getRotation()),
-      new PathPoint(new Translation2d(14.12, 4.48), Rotation2d.fromDegrees(0), swerve.getPose().getRotation())
-      );
+        new PathConstraints(4, 3), 
+        new PathPoint(swerve.getPose().getTranslation(), Rotation2d.fromDegrees(0), swerve.getPose().getRotation()),
+        new PathPoint(new Translation2d(5.35, 4.48), Rotation2d.fromDegrees(0), swerve.getPose().getRotation()),
+        new PathPoint(new Translation2d(2.39, 4.48), Rotation2d.fromDegrees(0), swerve.getPose().getRotation())
+        );
+
+      }else{
+        toGrid = PathPlanner.generatePath(
+        new PathConstraints(4, 3), 
+        new PathPoint(swerve.getPose().getTranslation(), Rotation2d.fromDegrees(0), swerve.getPose().getRotation()),
+        new PathPoint(new Translation2d(11.24, 4.48), Rotation2d.fromDegrees(0), swerve.getPose().getRotation()),
+        new PathPoint(new Translation2d(14.12, 4.48), Rotation2d.fromDegrees(0), swerve.getPose().getRotation())
+        );
+      }
+      }else{
+    if(DriverStation.getAlliance() == Alliance.Blue){
+        rotation = 180;
+      
+      toGrid = PathPlanner.generatePath(
+        new PathConstraints(4, 3), 
+        new PathPoint(swerve.getPose().getTranslation(), Rotation2d.fromDegrees(0), swerve.getPose().getRotation()),
+        new PathPoint(new Translation2d(5.39, 1.08), Rotation2d.fromDegrees(0), swerve.getPose().getRotation()),
+        new PathPoint(new Translation2d(2.39, 1.08), Rotation2d.fromDegrees(0), swerve.getPose().getRotation())
+        );
+      }else{
+        toGrid = PathPlanner.generatePath(
+        new PathConstraints(4, 3), 
+        new PathPoint(swerve.getPose().getTranslation(), Rotation2d.fromDegrees(0), swerve.getPose().getRotation()),
+        new PathPoint(new Translation2d(11.12, 1.06), Rotation2d.fromDegrees(0), swerve.getPose().getRotation()),
+        new PathPoint(new Translation2d(14.12, 1.06), Rotation2d.fromDegrees(0), swerve.getPose().getRotation())
+        );
+
+      }}
+      scuffedPathPlanner.resetTimer();
+      scuffedPathPlanner.setTrajectory(toGrid);
     }
-    }else{
-  if(DriverStation.getAlliance() == Alliance.Blue){
-      rotation = 180;
-    
-    toGrid = PathPlanner.generatePath(
-      new PathConstraints(4, 3), 
-      new PathPoint(swerve.getPose().getTranslation(), Rotation2d.fromDegrees(0), swerve.getPose().getRotation()),
-      new PathPoint(new Translation2d(5.39, 1.08), Rotation2d.fromDegrees(0), swerve.getPose().getRotation()),
-      new PathPoint(new Translation2d(2.39, 1.08), Rotation2d.fromDegrees(0), swerve.getPose().getRotation())
-      );
-    }else{
-      toGrid = PathPlanner.generatePath(
-      new PathConstraints(4, 3), 
-      new PathPoint(swerve.getPose().getTranslation(), Rotation2d.fromDegrees(0), swerve.getPose().getRotation()),
-      new PathPoint(new Translation2d(11.12, 1.06), Rotation2d.fromDegrees(0), swerve.getPose().getRotation()),
-      new PathPoint(new Translation2d(14.12, 1.06), Rotation2d.fromDegrees(0), swerve.getPose().getRotation())
-      );
-
-    }}
-    scuffedPathPlanner.resetTimer();
-    scuffedPathPlanner.setTrajectory(toGrid);
+    pathStarted = true;
     Translation2d targetTranslation2d = scuffedPathPlanner.getDesiredPose2d(false, 1, swerve.getPose()).getTranslation();
     double currentTime  = Timer.getFPGATimestamp();
     double dt = currentTime-lastTimeStamp;
     xError = xPID.calculate(Robotx-targetTranslation2d.getX(), dt);
     yError = yPID.calculate(Roboty-targetTranslation2d.getY(), dt);
-    if(Math.abs(Robotx-targetTranslation2d.getX())<.01&&Math.abs(Roboty-targetTranslation2d.getY())<.01){
+    if(Math.abs(Robotx-targetTranslation2d.getX())>.01&&Math.abs(Roboty-targetTranslation2d.getY())>.01){
       swerve.Aim(new Translation2d(xError, -yError), rotation);
     }
     else{
-      new AutoScore().schedule();
+      pathStarted = false;
+      new AutoScore().schedule(); 
     }
 }
   

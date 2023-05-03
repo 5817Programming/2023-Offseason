@@ -43,7 +43,7 @@ public class ScuffedPathGenerator extends SubsystemBase {
     return instance;
 }
 
-public static PathPlannerTrajectory generateAvoidedPath(
+public static PathPlannerTrajectory generateAvoidedPath
       PathConstraints constraints,
       Translation2d point1,
       Translation2d point2,
@@ -53,14 +53,20 @@ public static PathPlannerTrajectory generateAvoidedPath(
     pointsList.add(point2);
     pointsList.addAll(List.of(points));
     for(int i = 0; i < pointsList.size()-1; i ++){
-        Line2d testLine = new Line2d(pointsList.get(i), pointsList.get(i+1));
+        Line2d testLine = new Line2d(pointsList.get(i), pointsList.get(i+1));6780¿89''''''''''''''''''''''''''''''''''''''''''''''
 
     }
     return generatePath(constraints, pointsList);
   }
 
-public void insertObject(List<Translation2d> objectDimensions){
-    objectContraints.add(objectDimensions);
+public static void insertObject(Line2d line1, Line2d line2, Line2d... lines){
+  objectContraints.add(line1);
+  objectContraints.add(line2);
+  objectContraints.add(List.of(points));
+}
+
+public static void removeObject(){
+  objectContraints.clear();
 }
 public static void removeObject(){
   
