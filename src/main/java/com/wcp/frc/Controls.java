@@ -116,7 +116,6 @@ public class Controls {
         boolean coDriverBackButton = CoDriver.getBackButton();
 
 
-       
         if (codriverLeftBumperTAP) {
             if (pick) {// cube
                 pickup = true;
@@ -126,7 +125,7 @@ public class Controls {
                 pick = true;
             }
         }
-
+   
         if (driverLeftStickDown) {
             scores.zero();
         }
@@ -166,9 +165,6 @@ public class Controls {
         }
 
 
-
-        
-     
 
 
         if (coDriverAButton || coDriverBButton || coDriverXButton || coDriverYButton || coDriverBackButton || coDriverLeftStickDown

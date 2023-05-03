@@ -9,7 +9,7 @@ import com.wcp.frc.Constants;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Scores extends SubsystemBase {
-  private State currentState = State.ZERO;
+   State currentState = State.ZERO;
   public double armOffset = 0;
   public double elevatorOffset =  0;
   public boolean CUBE= false;
