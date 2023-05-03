@@ -9,10 +9,10 @@ import com.wcp.frc.Constants;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Scores extends SubsystemBase {
-  private State currentState = State.ZERO;
+   State currentState = State.ZERO;
   public double armOffset = 0;
   public double elevatorOffset =  0;
-  public boolean Cube= false;
+  public boolean CUBE= false;
   public double elevatorPercent;
   public double armPercent;
   public double elevatorDesired=Constants.ElevatorConstants.ZERO;
@@ -23,7 +23,6 @@ public class Scores extends SubsystemBase {
   public double armSetPoint=Constants.ArmConstants.ZERO;
   
   
-  public boolean Cube= true;
   
 
   /** Creates a new Scores. */
@@ -58,7 +57,7 @@ public class Scores extends SubsystemBase {
     } else if (coDriverB) {
       currentState = State.MID;
     } else if (coDriverX) {
-      currentState = State.HOOMAN;
+      currentState = State.HUMAN;
     } else if (coDriverY) {
       currentState = State.HIGH;
     } else if (coDriverBackButton) {
@@ -66,26 +65,26 @@ public class Scores extends SubsystemBase {
     } else if (coDriverLeftStickDown) {
       currentState = State.ZERO;
     }
-    this.Cube = Cube;
+    this.CUBE = Cube;
   }
 
-  public static void selectPreset(){
-    if(curentState == State.HIGH&&!CUBE){
+  public void selectPreset(){
+    if(currentState == State.HIGH&&!CUBE){
       scoreHighCone();
     }
-    if(curentState == State.MID&&!CUBE){
+    if(currentState == State.MID&&!CUBE){
       scoreMidCone();
     }
-    if(curentState == State.LOW&&!CUBE){
+    if(currentState == State.LOW&&!CUBE){
       scoreLowCone();
     }
-    if(curentState == State.HIGH&&CUBE){
+    if(currentState == State.HIGH&&CUBE){
       scoreHighCube();
     } 
-    if(curentState == State.MID&&CUBE){
+    if(currentState == State.MID&&CUBE){
       scoreMidCube();
     }
-    if(curentState == State.LOW&&CUBE){
+    if(currentState == State.LOW&&CUBE){
       scoreLowCube();
     }
     if(currentState == State.CHUTE){
@@ -95,26 +94,26 @@ public class Scores extends SubsystemBase {
       zero();
     }
     if(currentState == State.HUMAN&&!CUBE){
-      hooman();
+      hoomanCone();
     }
     if(currentState == State.HUMAN&&CUBE){
-      hooman();
+      hoomanCube();
     }
   }
-  public static void setElevator(State state){
+  public void setElevator(State state){
     currentState = state;
     setElevator();
   }
-  public static void setElevator(){
+  public void setElevator(){
     selectPreset();
     goToPreset();
   }
-  public static void goToPreset(){
+  public void goToPreset(){
 
     if ((arm.getEncoder()/armDesired)<1.1){
       armPercent = arm.getEncoder()/armDesired;
     }
-    else if ((elevator.getEncoder()/height)>1.1){
+    else if ((elevator.getEncoder()/elevatorDesired)>1.1){
       armPercent = armDesired/arm.getEncoder();
     }
     if(elevatorDesired>elevator.getEncoder()){
@@ -142,13 +141,13 @@ public class Scores extends SubsystemBase {
 
   public void hoomanCube() {
     sideElevatorDesired = (Constants.SideElevatorConstants.HOOMAN);
-    elevatorDesired = (Constants.ElevatorConstants.HOOMAN);
+    elevatorDesired = (Constants.ElevatorConstants.HOOMAN_CUBE);
     armDesired = (Constants.ArmConstants.HOOMAN-armOffset);
   }  
   
   public void hoomanCone() {
     sideElevatorDesired = (Constants.SideElevatorConstants.HOOMAN);
-    elevatorDesired = (Constants.ElevatorConstants.HOOMAN);
+    elevatorDesired = (Constants.ElevatorConstants.HOOMAN_CONE);
     armDesired = (Constants.ArmConstants.HOOMAN-armOffset);
   }
 

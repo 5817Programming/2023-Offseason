@@ -170,19 +170,12 @@ public class Controls {
 
         }
         
-        if (coDriverLeftY > .2&&scores.sideElvator>Constants.SideElevatorConstants.MAX_DOWN-210) {
-            scores.sideElvator -= 200;
-        }
-
-        if (coDriverLeftY < -.2&&scores.sideElvator<Constants.SideElevatorConstants.MAX_UP-210) {
-            scores.sideElvator += 200;
-        }
-
+     
 
         if (coDriverAButton || coDriverBButton || coDriverXButton || coDriverYButton || coDriverBackButton || coDriverLeftStickDown
                 || codriverLeftBumperTAP) {
 
-            scores.score(coDriverAButton, coDriverBButton, coDriverXButton, coDriverYButton, coDriverBackButton, coDriverLeftStickDown,
+            scores.setHeight(coDriverAButton, coDriverBButton, coDriverXButton, coDriverYButton, coDriverBackButton, coDriverLeftStickDown,
                     codriverLeftBumperTAP, cube);
         }
 
@@ -215,7 +208,6 @@ public class Controls {
         }
       
        // vision.getHeight(driverLeftTrigger, driverightTrigger);
-        scores.scoring();
         lights.setLights(codriverRightBumperTAP, codriverLeftBumperTAP);
 
         
