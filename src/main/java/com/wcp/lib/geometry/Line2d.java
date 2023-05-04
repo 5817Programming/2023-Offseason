@@ -151,7 +151,11 @@ public double getSlope(){
     }
    
 }
-
+public Line2d push(double hypt){
+    double normSlope=-1/(getSlope());
+    double theta = Math.arctan(normSlope);
+    return new Line2d(new Translation2d(mx1+(hypt*Math.cos(theta)),my1+(hypt*Math.sin(theta))),new Translation2d(mx2+(hypt*Math.cos(theta)),my2+(hypt*sin(theta))));
+}
 
 public double midPointX(){
     return ((mRightPoint.x() - mLeftPoint.x())/2) + mLeftPoint.x();

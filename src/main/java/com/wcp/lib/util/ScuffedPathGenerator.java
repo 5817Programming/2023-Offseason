@@ -76,11 +76,11 @@ public PathPlannerTrajectory generateAvoidedPath(
       return PathPlanner.generatePath(constraints, pointsList);
   }
 public void insertObject(Line2d line1, Line2d line2, Line2d... lines){
-  objectContraints.add(line1.extend(Constants.mRobotHypot));
-  objectContraints.add(line2.extend(Constants.mRobotHypot));
+  objectContraints.add(line1.push(Constants.mRobotHypot).extend(Constants.mRobotHypot));
+  objectContraints.add(line2.push(Constants.mRobotHypot).extend(Constants.mRobotHypot));
   List<Line2d> tempList = new ArrayList<>();
   tempList.addAll(List.of(lines));
-  for(int i = 0; i < tempList.size(); i++) {tempList.set(i, tempList.get(i).extend(Constants.mRobotHypot));}
+  for(int i = 0; i < tempList.size(); i++) {tempList.set(i, tempList.get(i).push(Constants.mRobotHypot).extend(Constants.mRobotHypot));}
   objectContraints.addAll(tempList);
 }
 
