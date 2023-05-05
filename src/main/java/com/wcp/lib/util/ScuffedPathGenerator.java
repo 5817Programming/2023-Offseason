@@ -26,6 +26,8 @@ public class ScuffedPathGenerator extends SubsystemBase {
   int pointIndex = 0;
   Translation2d previousPose;
   List<Line2d> objectContraints = new ArrayList();
+  Translation2d lastSample = new Translation2d();
+  double heading;
 
   private static ScuffedPathGenerator instance = null;
   public static ScuffedPathGenerator getInstance() {// if doesnt have an instance will make a new one
@@ -36,6 +38,7 @@ public class ScuffedPathGenerator extends SubsystemBase {
 
 public PathPlannerTrajectory generateAvoidedPath(
     PathConstraints constraints,
+    Translation2d currentSample = new Translation2d();
     PathPoint point1,
     PathPoint point2) {
     List<PathPoint> pointsList = new ArrayList<>();
@@ -43,41 +46,20 @@ public PathPlannerTrajectory generateAvoidedPath(
     pointsList.add(point1);
     pointsList.add(point2);
      PathPlannerTrajectory testTraj = PathPlanner.generatePath(constraints,pointsList);
-    // while(!noColosions){
        for(double i=0; i < testTraj.getTotalTimeSeconds()*100; i++){
-         testLine = new Line2d(new Translation2d(testTraj.sample(i/100).poseMeters.getTranslation().getX(), testTraj.sample(i/100).poseMeters.getTranslation().getY()),
+        currentSample = testTraj.sample(i);
+        heading = Math.atan((lastSample.y()-currentSample.y())/lastSample.x()-currentSample.x())*(180/Math.PI);
+        testLine = new Line2d(new Translation2d(testTraj.sample(i/100).poseMeters.getTranslation().getX(), testTraj.sample(i/100).poseMeters.getTranslation().getY()),
         new Translation2d(testTraj.sample((i+1)/100).poseMeters.getTranslation().getX(),testTraj.sample((i+1)/100).poseMeters.getTranslation().getY()));
         for(Line2d obj:objectContraints){
           if(testLine.intersectsWith(obj)){
-            pointsList.add(new PathPoint(testLine.getInterSection().translateBy(testLine.getDistanceIntersectionToEnd(obj,true))));
+            pointsList.add(new PathPoint(testLine.getInterSection(obj).translateBy(testLine.getDistanceIntersectionToEnd(obj)),new Rotation2d.fromDegrees(heading)));
             testTraj = PathPlanner.generatePath(constraints,pointsList);
           }
         }
+        lastSample = currentSample;
        }
-  //       for(int j = 0; j < objectContraints.size(); j++){
-  //         Line2d lineAcrossPoints = new Line2d(new Translation2d(pointsList.get(pointIndex).position.getX(),pointsList.get(pointIndex).position.getY()), new Translation2d(pointsList.get(pointIndex+1).position.getX(),pointsList.get(pointIndex+1).position.getY()));
-  //           if(testLine.intersectsWith(objectContraints.get(j))){
-  //               if(objectContraints.get(j).getSlope()>1){
-  //                 if(lineAcrossPoints.getTop().y()>objectContraints.get(j).getTop().y()){
-  //                   pointsList.add(pointsList.size()-2, new PathPoint(objectContraints.get(j).getTop(), new Rotation2d()));
-  //                 }
-  //                 else{
-  //                   pointsList.add(pointsList.size()-2, new PathPoint(objectContraints.get(j).getBottom(), new Rotation2d()));
-  //                 }
-  //               }
-  //               else{
-  //                 if(lineAcrossPoints.getRight().x()>objectContraints.get(j).getRight().x()){
-  //                   pointsList.add(pointsList.size()-2, new PathPoint(objectContraints.get(j).getTop(), new Rotation2d()));
-  //                 }
-  //                 else{
-  //                   pointsList.add(pointsList.size()-2, new PathPoint(objectContraints.get(j).getBottom(), new Rotation2d()));
-  //                 }
-  //               }
-  //               pointIndex++;
-  //           }
-            
-  //       }
-  //  //   }
+      
 
       return PathPlanner.generatePath(constraints, pointsList);
   }

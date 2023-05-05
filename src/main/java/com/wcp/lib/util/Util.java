@@ -46,4 +46,7 @@ public class Util {
         double reversedAngleDifference = Math.abs(goalAngle.distance(currentAngle.rotateBy(Rotation2d.fromDegrees(180.0))));
         return reversedAngleDifference < angleDifferene;
     }
+    public static double toRadians(double degrees){
+        return degrees*(Math.PI/180);
+    }
 }

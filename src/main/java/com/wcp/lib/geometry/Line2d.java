@@ -141,15 +141,21 @@ public class Line2d {
             double y = (a1 * c2 - a2 * c1) / det;
             return new Translation2d(x,y);
         }
-    public Translation2d getDistanceIntersectionToEnd(Line2d otherLine,boolean left){
+    public Translation2d getDistanceIntersectionToEnd(Line2d otherLine){
         Translation2d intersection = getInterSection(otherLine);
-        if(left){
-            return new Translation2d(intersection.x()-mX1,intersection.y()-mY1)
+        if(getside(otherLine)){
+            return new Translation2d(intersection.x()-mX1,intersection.y()-mY1);
         }
-        return new Translation2d(intersection.x()-mX2,intersection.y()-mY1)
+        return new Translation2d(intersection.x()-mX2,intersection.y()-mY1);
     }
     public double getLength(){
-        return Math.root(((mX2-mX1)**2)+((mY2-mY1)**2))
+        return Math.sqrt(Math.pow((mX2-mX1),2)+(Math.pow(mY2-mY1,2)));
+    }
+    public boolean getside(Line2d otherLine){
+        Translation2d intersection = getInterSection(otherLine);
+        double left = Math.sqrt((intersection.x()-mX1) + Math.pow((intersection.y()-mY1),2));
+        double right = Math.sqrt((intersection.x()-mX2) + Math.pow((intersection.y()-mY2),2));
+        return left>right;
     }
 
 public double getSlope(){
@@ -163,8 +169,8 @@ public double getSlope(){
 }
 public Line2d push(double hypt){
     double normSlope=-1/(getSlope());
-    double theta = Math.arctan(normSlope);
-    return new Line2d(new Translation2d(mx1+(hypt*Math.cos(theta)),my1+(hypt*Math.sin(theta))),new Translation2d(mx2+(hypt*Math.cos(theta)),my2+(hypt*sin(theta))));
+    double theta = Math.atan(normSlope)*180/Math.PI;
+    return new Line2d(new Translation2d(mX1+(hypt*Math.cos(theta)),mY1+(hypt*Math.sin(theta))),new Translation2d(mX2+(hypt*Math.cos(theta)),mY2+(hypt*Math.sin(theta))));
 }
 
 public double midPointX(){
