@@ -42,12 +42,18 @@ public PathPlannerTrajectory generateAvoidedPath(
     Line2d testLine = new Line2d();
     pointsList.add(point1);
     pointsList.add(point2);
-  //   PathPlannerTrajectory testTraj = PathPlanner.generatePath(constraints,pointsList);
-  //  // while(!noColosions){
-  //     for(double i=0; i < testTraj.getTotalTimeSeconds()*100; i++){
-  //       testLine = new Line2d(new Translation2d(testTraj.sample(i).poseMeters.getTranslation().getX(), testTraj.sample(i).poseMeters.getTranslation().getY()),
-  //       new Translation2d(testTraj.sample(i+1/100).poseMeters.getTranslation().getX(),testTraj.sample(i+1/100).poseMeters.getTranslation().getY()));
-  //     }
+     PathPlannerTrajectory testTraj = PathPlanner.generatePath(constraints,pointsList);
+    // while(!noColosions){
+       for(double i=0; i < testTraj.getTotalTimeSeconds()*100; i++){
+         testLine = new Line2d(new Translation2d(testTraj.sample(i/100).poseMeters.getTranslation().getX(), testTraj.sample(i/100).poseMeters.getTranslation().getY()),
+        new Translation2d(testTraj.sample((i+1)/100).poseMeters.getTranslation().getX(),testTraj.sample((i+1)/100).poseMeters.getTranslation().getY()));
+        for(Line2d obj:objectContraints){
+          if(testLine.intersectsWith(obj)){
+            pointsList.add(new PathPoint(testLine.getInterSection().translateBy(testLine.getDistanceIntersectionToEnd(obj,true))));
+            testTraj = PathPlanner.generatePath(constraints,pointsList);
+          }
+        }
+       }
   //       for(int j = 0; j < objectContraints.size(); j++){
   //         Line2d lineAcrossPoints = new Line2d(new Translation2d(pointsList.get(pointIndex).position.getX(),pointsList.get(pointIndex).position.getY()), new Translation2d(pointsList.get(pointIndex+1).position.getX(),pointsList.get(pointIndex+1).position.getY()));
   //           if(testLine.intersectsWith(objectContraints.get(j))){

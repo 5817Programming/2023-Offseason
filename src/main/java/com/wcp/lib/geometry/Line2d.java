@@ -141,6 +141,16 @@ public class Line2d {
             double y = (a1 * c2 - a2 * c1) / det;
             return new Translation2d(x,y);
         }
+    public Translation2d getDistanceIntersectionToEnd(Line2d otherLine,boolean left){
+        Translation2d intersection = getInterSection(otherLine);
+        if(left){
+            return new Translation2d(intersection.x()-mX1,intersection.y()-mY1)
+        }
+        return new Translation2d(intersection.x()-mX2,intersection.y()-mY1)
+    }
+    public double getLength(){
+        return Math.root(((mX2-mX1)**2)+((mY2-mY1)**2))
+    }
 
 public double getSlope(){
     if(mX2 == mX1){
