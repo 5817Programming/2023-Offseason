@@ -54,8 +54,8 @@ public class Aim extends SubsystemBase {
 
   @Override
   public void periodic() {
-  Roboty = swerve.getPose().getTranslation().y();
-  Robotx = swerve.getPose().getTranslation().x();
+  Roboty = swerve.getPose().getTranslation().getY();
+  Robotx = swerve.getPose().getTranslation().getX();
   //CommandScheduler.getInstance().run();
   swerve = Swerve.getInstance();
 

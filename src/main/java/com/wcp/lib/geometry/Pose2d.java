@@ -30,7 +30,15 @@ public class Pose2d extends edu.wpi.first.math.geometry.Pose2d {
     public static Pose2d fromRotaiton(final Rotation2d rotation) {
         return new Pose2d(new Translation2d(), rotation);
     }
-    
+            /**
+     * The inverse of this transform "undoes" the effect of translating by this transform.
+     *
+     * @return The opposite of this transform.
+     */
+    public Pose2d inverse() {
+        Rotation2d rotation_inverted = mRotation.inverse();
+        return new Pose2d(mTranslation.inverse().rotateBy(rotation_inverted), rotation_inverted);
+    }
     @Override
     public Rotation2d getRotation() {
         return this.mRotation;
@@ -39,6 +47,17 @@ public class Pose2d extends edu.wpi.first.math.geometry.Pose2d {
     @Override
     public Translation2d getTranslation() {
         return this.mTranslation;
+    }
+        /**
+     * Transforming this RigidTransform2d means first translating by other.translation and then rotating by
+     * other.rotation
+     *
+     * @param other The other transform.
+     * @return This transform * other
+     */
+    public Pose2d transformBy(final Pose2d other) {
+        return new Pose2d(mTranslation.translateBy(other.mTranslation.rotateBy(mRotation)),
+                mRotation.rotateBy(other.mRotation));
     }
 
 }

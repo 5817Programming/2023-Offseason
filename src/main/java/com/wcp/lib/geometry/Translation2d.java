@@ -29,7 +29,7 @@ public class Translation2d extends edu.wpi.first.math.geometry.Translation2d{
     public double norm() {
         return Math.hypot(mX, mY);
     }
-
+    
     public double x() {
         return mX;
     }

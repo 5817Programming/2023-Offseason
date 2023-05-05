@@ -4,6 +4,8 @@
 
 package com.wcp.frc.subsystems;
 
+import org.littletonrobotics.junction.Logger;
+
 import com.ctre.phoenix.ErrorCode;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
@@ -13,9 +15,13 @@ import com.ctre.phoenix.motorcontrol.TalonFXInvertType;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.sensors.SensorVelocityMeasPeriod;
 import com.wcp.frc.Constants;
+import com.wcp.frc.Options;
 import com.wcp.frc.Ports;
 import com.wcp.frc.subsystems.encoders.Encoder;
 import com.wcp.frc.subsystems.encoders.MagEncoder;
+import com.wcp.lib.Conversions;
+import com.wcp.lib.geometry.Pose2d;
+import com.wcp.lib.geometry.Rotation2d;
 import com.wcp.lib.geometry.Translation2d;
 import com.wcp.lib.util.Util;
 
@@ -30,6 +36,15 @@ public class SwerveDriveModule extends Subsystem {
     double encoderOffset;
     Translation2d modulePosition;
     boolean rotationEncoderFlipped;
+    boolean standardCarpetDirection = true;
+    private Translation2d position = new Translation2d();
+    private Pose2d estimatedRobotPose = new Pose2d();
+    private Translation2d startingPosition;
+    private Translation2d mstartingPosition;
+    private double previousEncDistance = 0;
+
+
+
 
     PeriodicIO mPeriodicIO = new PeriodicIO();
 
@@ -42,19 +57,32 @@ public class SwerveDriveModule extends Subsystem {
      * @param modulePose -The position of the module relative to the robot's center
      * @param flipEncoder -Is the encoder going in the right direction? (clockwise = increasing, counter-clockwise = decreasing)
      */
-    public SwerveDriveModule(int rotationMotorPort, int driveMotorPort, int moduleID, double encoderStartingPos, Translation2d modulePose, boolean flipEncoder) {
-        this.rotationMotor = new TalonFX(rotationMotorPort);
-        this.driveMotor = new TalonFX(driveMotorPort);
-        this.moduleID = moduleID;
-        this.name = "Module " + moduleID;
-        this.encoderOffset = encoderStartingPos;
-        this.modulePosition = modulePose;
-        this.rotationEncoderFlipped = flipEncoder;
+    public SwerveDriveModule(int rotationMotorPort, int driveMotorPort, int moduleID, double encoderStartingPos,
+    Translation2d modulePoseInches, boolean flipEncoder ,Translation2d moduleposemeters){
+this.rotationMotor = new TalonFX(rotationMotorPort);
+this.driveMotor = new TalonFX(driveMotorPort);
+this.moduleID = moduleID;
+this.name = "Module " + moduleID;
+this.encoderOffset = encoderStartingPos;
+this.modulePosition = modulePoseInches;
+this.startingPosition =modulePoseInches;
+this.mstartingPosition =moduleposemeters;
 
-        rotationMagEncoder = new MagEncoder(Ports.SWERVE_ENCODERS[moduleID]);
 
-        configMotors(); 
-    }
+this.rotationEncoderFlipped = flipEncoder;
+
+if (Options.encoderType == "Mag Encoder") {
+    rotationMagEncoder = new MagEncoder(Ports.SWERVE_ENCODERS[moduleID]);
+} /*
+   * else if(Options.encoderType == "Inductive Encoder") {
+   * rotationMagEncoder = new InductiveEncoder(Ports.SWERVE_ENCODERS[moduleID]);
+   * } else if(Options.encoderType == "CANCoder") {
+   * rotationMagEncoder = new CANEncoder(Ports.SWERVE_ENCODERS[moduleID]);
+   * }
+   */
+
+configMotors();
+}
 
     public void configMotors() {
         rotationMotor.configFactoryDefault();
@@ -143,7 +171,16 @@ public class SwerveDriveModule extends Subsystem {
     }
 
 /////////////////////
-
+public synchronized void resetPose(Pose2d robotPose){
+    Translation2d modulePosition = robotPose.transformBy(Pose2d.fromTranslation(mstartingPosition)).getTranslation();
+    position = modulePosition;
+}
+public synchronized void resetPose(){
+    position = mstartingPosition;
+}
+public Pose2d getEstimatedRobotPose(){
+    return estimatedRobotPose;
+}
     public void setDriveDistanceMode(double distanceInches) {
         mPeriodicIO.driveControlMode = ControlMode.Position;
         mPeriodicIO.driveDemand = inchesToEncUnits(distanceInches);
@@ -161,6 +198,62 @@ public class SwerveDriveModule extends Subsystem {
         return (inches / Constants.kOuterWheelDriveDiameter) * 2048.0 * Constants.kSwerveWheelReduction;
     }
 
+    public Rotation2d getFieldCentricAngle(Rotation2d robotHeading){
+		Rotation2d normalizedAngle =Rotation2d.fromDegrees( getModuleAngle());
+		return normalizedAngle.rotateBy(robotHeading);
+	}
+
+    public void updatePose(Rotation2d robotHeading){
+		double currentEncDistance = Conversions.falconToMeters(driveMotor.getSelectedSensorPosition(), Constants.kWheelCircumference, Options.driveRatio);
+		double deltaEncDistance = (currentEncDistance - previousEncDistance) * Constants.kWheelScrubFactors[moduleID];
+		Rotation2d currentWheelAngle = getFieldCentricAngle(robotHeading);
+		Translation2d deltaPosition = new Translation2d(currentWheelAngle.cos()*deltaEncDistance, 
+				currentWheelAngle.sin()*deltaEncDistance);
+
+		double xScrubFactor = Constants.kXScrubFactor;
+		double yScrubFactor = Constants.kYScrubFactor;
+        if(Util.epsilonEquals(Math.signum(deltaPosition.x()), 1.0)){
+            if(standardCarpetDirection){
+                xScrubFactor = 1.0;
+            }else{
+                
+            }
+        }else{
+            if(standardCarpetDirection){
+                
+            }else{
+                xScrubFactor = 1.0;
+            }
+        }
+        if(Util.epsilonEquals(Math.signum(deltaPosition.y()), 1.0)){
+            if(standardCarpetDirection){
+                yScrubFactor = 1.0;
+            }else{
+                
+            }
+        }else{
+            if(standardCarpetDirection){
+                
+            }else{
+                yScrubFactor = 1.0;
+            }
+        }
+
+
+		deltaPosition = new Translation2d(deltaPosition.x() * xScrubFactor,
+			deltaPosition.y() * yScrubFactor);
+        Logger.getInstance().recordOutput("delta x " + moduleID, deltaPosition.x());
+        Logger.getInstance().recordOutput("delta t" + moduleID, deltaPosition.y());
+		Translation2d updatedPosition = position.translateBy(deltaPosition);
+		Pose2d staticWheelPose = new Pose2d(updatedPosition, robotHeading);
+		Pose2d robotPose = staticWheelPose.transformBy(Pose2d.fromTranslation(mstartingPosition).inverse());
+		position = updatedPosition;
+		estimatedRobotPose =  robotPose;
+		previousEncDistance = currentEncDistance;
+        Logger.getInstance().recordOutput("robotpose" + moduleID, estimatedRobotPose);
+	}
+
+
     public void resetModulePositionToAbsolute() {
         if(rotationMotor.setSelectedSensorPosition(0) == ErrorCode.OK) {
             if(isMagEncoderConnected()) {
@@ -173,6 +266,7 @@ public class SwerveDriveModule extends Subsystem {
         if(driveMotor.setSelectedSensorPosition(0) != ErrorCode.OK)
             driveMotorError = true;
     }
+
 
     public enum ModuleStatus {
         OK,  ABSOLUTE_ENCODER_ERROR, DRIVE_MOTOR_ERROR, ROTATION_MOTOR_ERROR;
