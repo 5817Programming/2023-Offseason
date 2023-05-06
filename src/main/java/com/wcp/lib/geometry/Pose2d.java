@@ -43,6 +43,15 @@ public class Pose2d extends edu.wpi.first.math.geometry.Pose2d {
     public Rotation2d getRotation() {
         return this.m_rotation;
     }
+    @Override
+    public double getX(){
+        return m_translation.m_x;
+    }
+    @Override
+    public double getY(){
+        return m_translation.m_y;
+    }
+    
     
     @Override
     public Translation2d getTranslation() {

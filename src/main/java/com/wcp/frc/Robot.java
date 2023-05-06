@@ -64,11 +64,6 @@ public class Robot extends LoggedRobot {
     subsystemManager.addSystems(Arrays.asList(
             swerve
     ));
-    scuffedPathGenerator.insertObject(
-      new Line2d(new Translation2d(2.8,1.52), new Translation2d(4.8,1.52)),
-      new Line2d(new Translation2d(2.8,4), new Translation2d(4.8,4)),
-      new Line2d(new Translation2d(2.8,4), new Translation2d(2.8,1.52)),
-      new Line2d(new Translation2d(4.8,4), new Translation2d(4.8,1.52)));
   }
 
   /**
@@ -130,12 +125,6 @@ public class Robot extends LoggedRobot {
   @Override
   public void teleopPeriodic() {
 
-      PathPlannerTrajectory testthing = PathPlanner.generatePath(new PathConstraints(4,4), new PathPoint(Translation2d.toWPI(2.09, 1.18), Rotation2d.fromDegrees(0)) ,  new PathPoint( Translation2d.toWPI(6.17, 4.67), Rotation2d.fromDegrees(0)));
-
-     Logger.getInstance().recordOutput("test thing", testthing);
-     PathPlannerTrajectory testTraj = 
-     Logger.getInstance().recordOutput("test Trajectory", testTraj);
-    controls.update();
   }
 
   /** This function is called once when the robot is disabled. */

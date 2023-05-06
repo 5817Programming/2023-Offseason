@@ -11,6 +11,13 @@ import java.util.Set;
 
 
 public class VisGraph {
+    public static VisGraph instance = null;
+
+    public static VisGraph getInstance(){
+        if(instance == null)
+            instance = new VisGraph();
+        return instance;
+    }
 
     // A class representing the navigation mesh
     private final List<Node> nodes;

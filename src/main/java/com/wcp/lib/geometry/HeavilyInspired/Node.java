@@ -31,7 +31,7 @@ public class Node {
       this.x = swerve.getPose().getTranslation().getX();
       this.y = swerve.getPose().getTranslation().getY(); 
       this.holonomicRotation = swerve.getPose().getRotation();
-      this.neighbors = new ArrayList < > ();
+      this.neighbors = new ArrayList <>();
     }
   
     public Node(Translation2d coordinates, Rotation2d holonomicRotation) {

@@ -13,6 +13,16 @@ public class Rotation2d extends edu.wpi.first.math.geometry.Rotation2d{
     public Rotation2d() {
         this(1,0, false);
     }
+    public Rotation2d(double x, double y) {
+        double magnitude = Math.hypot(x, y);
+        if (magnitude > 1e-6) {
+          m_sin = y / magnitude;
+          m_cos = x / magnitude;
+        } else {
+          m_sin = 0.0;
+          m_cos = 1.0;
+        }
+    }
     
     public Rotation2d(double x, double y, boolean normalize) {
         if(normalize) {
