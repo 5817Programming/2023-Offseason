@@ -19,7 +19,7 @@ import com.wcp.frc.subsystems.Swerve;
 import com.wcp.frc.subsystems.Vision;
 import com.wcp.lib.geometry.Rotation2d;
 import com.wcp.lib.geometry.Translation2d;
-import com.wcp.lib.util.ScuffedPathGenerator;
+import com.wcp.lib.util.PathGenerator;
 
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -36,7 +36,7 @@ public class Robot extends LoggedRobot {
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
 
   Controls controls;
-  ScuffedPathGenerator scuffedPathGenerator;
+  PathGenerator scuffedPathGenerator;
   SubsystemManager subsystemManager;
   Swerve swerve;
   double yaw;

@@ -1,4 +1,4 @@
-package com.wcp.lib.geometry;
+package com.wcp.lib.geometry.HeavilyInspired;
 
 import java.util.ArrayList;
 import java.util.List;

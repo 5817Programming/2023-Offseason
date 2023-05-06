@@ -30,7 +30,7 @@ import java.util.function.Supplier;
 import org.littletonrobotics.junction.Logger;
 
 /** Custom PathPlanner version of SwerveControllerCommand */
-public class ScuffedPathPlanner extends SubsystemBase {
+public class PathFollower extends SubsystemBase {
   private final Timer timer = new Timer();
   private final Timer waitTimer = new Timer();
 
@@ -56,10 +56,10 @@ public class ScuffedPathPlanner extends SubsystemBase {
   private static Consumer<Pose2d> logTargetPose = null;
   private static Consumer<ChassisSpeeds> logSetpoint = null;
   private static BiConsumer<Translation2d, Rotation2d> logError =
-      ScuffedPathPlanner::defaultLogError;
+      PathFollower::defaultLogError;
 
   
-  public ScuffedPathPlanner() {
+  public PathFollower() {
       }
    
   public void startTimer(){
@@ -118,11 +118,11 @@ this.desiredRotation = desiredRotation;
     
   }
   
-  public static ScuffedPathPlanner instance = null;
+  public static PathFollower instance = null;
 
-  public static ScuffedPathPlanner getInstance() {// if doesnt have an instance of swerve will make a new one
+  public static PathFollower getInstance() {// if doesnt have an instance of swerve will make a new one
     if (instance == null)
-        instance = new ScuffedPathPlanner();
+        instance = new PathFollower();
     return instance;
 }
 public double getrotation(){
@@ -223,9 +223,9 @@ public double getStartRotation(){
       Consumer<Pose2d> logTargetPose,
       Consumer<ChassisSpeeds> logSetpoint,
       BiConsumer<Translation2d, Rotation2d> logError) {
-    ScuffedPathPlanner.logActiveTrajectory = logActiveTrajectory;
-    ScuffedPathPlanner.logTargetPose = logTargetPose;
-    ScuffedPathPlanner.logSetpoint = logSetpoint;
-    ScuffedPathPlanner.logError = logError;
+    PathFollower.logActiveTrajectory = logActiveTrajectory;
+    PathFollower.logTargetPose = logTargetPose;
+    PathFollower.logSetpoint = logSetpoint;
+    PathFollower.logError = logError;
   }
 }

@@ -1,4 +1,4 @@
-package com.wcp.lib.geometry;
+package com.wcp.lib.geometry.HeavilyInspired;
 
 public class Edge {
     public Node start;

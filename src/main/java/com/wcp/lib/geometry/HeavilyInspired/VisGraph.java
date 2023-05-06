@@ -1,4 +1,4 @@
-package com.wcp.lib.geometry;
+package com.wcp.lib.geometry.HeavilyInspired;
 
 import java.awt.geom.Line2D;
 import java.util.ArrayList;
@@ -8,6 +8,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
 
 public class VisGraph {
 

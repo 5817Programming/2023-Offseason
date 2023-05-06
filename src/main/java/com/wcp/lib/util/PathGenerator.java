@@ -16,11 +16,7 @@ import java.util.List;
 import org.littletonrobotics.junction.Logger;
 
 /** Custom PathPlanner version of SwerveControllerCommand */
-public class ScuffedPathGenerator extends SubsystemBase {
+public class PathGenerator {
 
-
-
-
-
- 
+    
 }

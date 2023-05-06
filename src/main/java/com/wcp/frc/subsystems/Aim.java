@@ -10,7 +10,7 @@ import com.pathplanner.lib.PathConstraints;
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
 import com.pathplanner.lib.PathPoint;
-import com.wcp.lib.util.ScuffedPathPlanner;
+import com.wcp.lib.util.PathFollower;
 import com.wcp.frc.Constants;
 import com.wcp.lib.geometry.Pose2d;
 import com.wcp.lib.geometry.Translation2d;
@@ -35,7 +35,7 @@ public class Aim extends SubsystemBase {
   SynchronousPIDF xPID;
   SynchronousPIDF yPID;
   double lastTimeStamp = 0;
-  ScuffedPathPlanner scuffedPathPlanner = ScuffedPathPlanner.getInstance();
+  PathFollower scuffedPathPlanner = PathFollower.getInstance();
   double Roboty;
   double Robotx;
   
