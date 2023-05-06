@@ -21,7 +21,7 @@ public class Constants {
     public static final double mRobotBaseWidth = Units.inchesToMeters(29); //The Robot Wheel Base Width
     public static final double mRobotBaseLength = Units.inchesToMeters(29); //The Robot Wheel Base Length
 
-    public static final double mRobotHypot = Math.hypot(mRobotBaseWidth,mRobotBaseLength);
+    public static final double mRobotHypot = Math.hypot(mRobotBaseWidth,mRobotBaseLength)*2;
 
     public static final double kOuterWheelDriveDiameter = 4.0;
     ///-------Swerve Values-------///
@@ -36,7 +36,6 @@ public class Constants {
     public static  double kSwerveRotationMaxSpeed = 12720.0 * 0.8;//trigger changes this in controls kinda ghetto ngl
     public static final double kSwerveDriveMaxSpeed = 22000.0; //The theoretical max speed(For the Falcon 500s)
     public static final double kSwerveRotation10VoltMaxSpeed = 1350.0;
-
     public static final double kSwerveRotationReduction = Options.rotationRatio; //The Module to Motor Ratio(i.e, amount the rotation motor rotates, for every one rotation for the module)
     public static final double kSwerveWheelReduction = Options.driveRatio; //The Wheel to Motor Ratio(i.e, amount the drive motor rotates, for every one rotation for the wheel)
     public static final double kSwerveRotationEncoderResolution = 2048.0;
@@ -49,8 +48,8 @@ public class Constants {
     public static final double kFrontLeftStartingEncoderPosition = -355.170825; //-263.094811
     public static final double kRearLeftStartingEncoderPosition =  -354.950352; //-121.094031
     public static final double kRearRightStartingEncoderPosition = -262; //-355.170825    
-    
-   
+
+
 
     public static final double kFrontRightParkEncoderPosition = -356; //-354.950352
     public static final double kFrontLeftParkEncoderPosition = -355.170825; //-263.094811

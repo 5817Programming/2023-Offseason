@@ -7,7 +7,6 @@ package com.wcp.lib.geometry;
 import static com.wcp.lib.util.Util.kEpsilon;
 /** Add your docs here. */
 public class Rotation2d extends edu.wpi.first.math.geometry.Rotation2d{
-    
     protected double m_cos;
     protected double m_sin;
 

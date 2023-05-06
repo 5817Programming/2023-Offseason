@@ -17,7 +17,6 @@ import com.pathplanner.lib.PathPoint;
 import com.wcp.frc.subsystems.SubsystemManager;
 import com.wcp.frc.subsystems.Swerve;
 import com.wcp.frc.subsystems.Vision;
-import com.wcp.lib.geometry.Line2d;
 import com.wcp.lib.geometry.Rotation2d;
 import com.wcp.lib.geometry.Translation2d;
 import com.wcp.lib.util.ScuffedPathGenerator;
@@ -61,12 +60,15 @@ public class Robot extends LoggedRobot {
 
     controls = Controls.getInstance();
     swerve = Swerve.getInstance();
-    scuffedPathGenerator = ScuffedPathGenerator.getInstance();
     subsystemManager = new SubsystemManager();
     subsystemManager.addSystems(Arrays.asList(
             swerve
     ));
-
+    scuffedPathGenerator.insertObject(
+      new Line2d(new Translation2d(2.8,1.52), new Translation2d(4.8,1.52)),
+      new Line2d(new Translation2d(2.8,4), new Translation2d(4.8,4)),
+      new Line2d(new Translation2d(2.8,4), new Translation2d(2.8,1.52)),
+      new Line2d(new Translation2d(4.8,4), new Translation2d(4.8,1.52)));
   }
 
   /**
@@ -127,16 +129,12 @@ public class Robot extends LoggedRobot {
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
-    // scuffedPathGenerator.insertObject(
-    //   new Line2d(new Translation2d(2.8,1.52), new Translation2d(4.8,1.52)),
-    //   new Line2d(new Translation2d(2.8,4), new Translation2d(4.8,4)),
-    //   new Line2d(new Translation2d(2.8,4), new Translation2d(2.8,1.52)),
-    //   new Line2d(new Translation2d(4.8,4), new Translation2d(4.8,1.52)));
-      PathPlannerTrajectory testthing = PathPlanner.generatePath(new PathConstraints(4,4), new PathPoint(Translation2d.toWPI(2.09, 1.18), Rotation2d.fromDegrees(0)) ,  new PathPoint( Translation2d.toWPI(6.17, 4.67), Rotation2d.fromDegrees(0)));
-     PathPlannerTrajectory testTraj = scuffedPathGenerator.generateAvoidedPath(new PathConstraints(4,4), new PathPoint(new Translation2d(2.09, 1.18), Rotation2d.fromDegrees(0)) ,  new PathPoint(new Translation2d(6.17, 4.67), Rotation2d.fromDegrees(0)));
-     Logger.getInstance().recordOutput("test Trajectory", testTraj);
-     Logger.getInstance().recordOutput("test thing", testthing);
 
+      PathPlannerTrajectory testthing = PathPlanner.generatePath(new PathConstraints(4,4), new PathPoint(Translation2d.toWPI(2.09, 1.18), Rotation2d.fromDegrees(0)) ,  new PathPoint( Translation2d.toWPI(6.17, 4.67), Rotation2d.fromDegrees(0)));
+
+     Logger.getInstance().recordOutput("test thing", testthing);
+     PathPlannerTrajectory testTraj = 
+     Logger.getInstance().recordOutput("test Trajectory", testTraj);
     controls.update();
   }
 
