@@ -8,8 +8,8 @@ import static com.wcp.lib.util.Util.kEpsilon;
 /** Add your docs here. */
 public class Rotation2d extends edu.wpi.first.math.geometry.Rotation2d{
     
-    protected double mCos;
-    protected double mSin;
+    protected double m_cos;
+    protected double m_sin;
 
     public Rotation2d() {
         this(1,0, false);
@@ -19,26 +19,26 @@ public class Rotation2d extends edu.wpi.first.math.geometry.Rotation2d{
         if(normalize) {
             double magnitude = Math.hypot(x, y);
             if (magnitude > kEpsilon) {
-                mCos = x / magnitude;
-                mSin = y / magnitude;
+                m_cos = x / magnitude;
+                m_sin = y / magnitude;
             } else {
-                mCos = 1;
-                mSin = 0;
+                m_cos = 1;
+                m_sin = 0;
             }
         } else {
-            mCos = x;
-            mSin = y;
+            m_cos = x;
+            m_sin = y;
         }
     }
     
     public Rotation2d(final Rotation2d otherRotation) {
-        mCos = otherRotation.mCos;
-        mSin = otherRotation.mSin;
+        m_cos = otherRotation.m_cos;
+        m_sin = otherRotation.m_sin;
     }
     
     public Rotation2d(double thetaDegrees) {
-        mCos = Math.cos(Math.toRadians(thetaDegrees));
-        mSin = Math.sin(Math.toRadians(thetaDegrees));
+        m_cos = Math.cos(Math.toRadians(thetaDegrees));
+        m_sin = Math.sin(Math.toRadians(thetaDegrees));
     }
     
     public static Rotation2d fromDegrees(double angle) {
@@ -46,14 +46,14 @@ public class Rotation2d extends edu.wpi.first.math.geometry.Rotation2d{
     }
     
     public double cos() {
-        return mCos;
+        return m_cos;
     }
     public double sin() {
-        return mSin;
+        return m_sin;
     }
     @Override
     public double getRadians() {
-        return Math.atan2(mSin, mCos);
+        return Math.atan2(m_sin, m_cos);
     }
     @Override
     public double getDegrees() {
@@ -61,7 +61,7 @@ public class Rotation2d extends edu.wpi.first.math.geometry.Rotation2d{
     }
     
     public Rotation2d rotateBy(final Rotation2d other) {
-        return new Rotation2d(mCos * other.mCos - mSin * other.mSin, mCos * other.mSin + mSin * other.mCos, true);
+        return new Rotation2d(m_cos * other.m_cos - m_sin * other.m_sin, m_cos * other.m_sin + m_sin * other.m_cos, true);
     }
     
     public double distance(Rotation2d other) {
@@ -69,10 +69,10 @@ public class Rotation2d extends edu.wpi.first.math.geometry.Rotation2d{
     }
     
     public Rotation2d inverse() {
-        return new Rotation2d(mCos, -mSin, false);
+        return new Rotation2d(m_cos, -m_sin, false);
     }
     
     public Translation2d toVector2d() {
-        return new Translation2d(mCos, mSin);
+        return new Translation2d(m_cos, m_sin);
     }
 }

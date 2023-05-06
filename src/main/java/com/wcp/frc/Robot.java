@@ -11,6 +11,7 @@ import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.NT4Publisher;
 
 import com.pathplanner.lib.PathConstraints;
+import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
 import com.pathplanner.lib.PathPoint;
 import com.wcp.frc.subsystems.SubsystemManager;
@@ -126,13 +127,16 @@ public class Robot extends LoggedRobot {
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
-    scuffedPathGenerator.insertObject(
-      new Line2d(new Translation2d(2.8,1.52), new Translation2d(4.8,1.52)),
-      new Line2d(new Translation2d(2.8,4), new Translation2d(4.8,4)),
-      new Line2d(new Translation2d(2.8,4), new Translation2d(2.8,1.52)),
-      new Line2d(new Translation2d(4.8,4), new Translation2d(4.8,1.52)));
+    // scuffedPathGenerator.insertObject(
+    //   new Line2d(new Translation2d(2.8,1.52), new Translation2d(4.8,1.52)),
+    //   new Line2d(new Translation2d(2.8,4), new Translation2d(4.8,4)),
+    //   new Line2d(new Translation2d(2.8,4), new Translation2d(2.8,1.52)),
+    //   new Line2d(new Translation2d(4.8,4), new Translation2d(4.8,1.52)));
+      PathPlannerTrajectory testthing = PathPlanner.generatePath(new PathConstraints(4,4), new PathPoint(Translation2d.toWPI(2.09, 1.18), Rotation2d.fromDegrees(0)) ,  new PathPoint( Translation2d.toWPI(6.17, 4.67), Rotation2d.fromDegrees(0)));
      PathPlannerTrajectory testTraj = scuffedPathGenerator.generateAvoidedPath(new PathConstraints(4,4), new PathPoint(new Translation2d(2.09, 1.18), Rotation2d.fromDegrees(0)) ,  new PathPoint(new Translation2d(6.17, 4.67), Rotation2d.fromDegrees(0)));
      Logger.getInstance().recordOutput("test Trajectory", testTraj);
+     Logger.getInstance().recordOutput("test thing", testthing);
+
     controls.update();
   }
 
