@@ -12,7 +12,6 @@ import org.littletonrobotics.junction.networktables.NT4Publisher;
 
 import com.pathplanner.lib.PathConstraints;
 import com.pathplanner.lib.PathPlannerTrajectory;
-import com.wcp.frc.subsystems.Aim;
 import com.wcp.frc.subsystems.SubsystemManager;
 import com.wcp.frc.subsystems.Swerve;
 import com.wcp.frc.subsystems.Vision;

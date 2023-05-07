@@ -4,7 +4,6 @@
 
 package com.wcp.frc.subsystems;
 
-import org.littletonrobotics.junction.Logger;
 import com.wcp.frc.Constants;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
