@@ -21,6 +21,7 @@ import java.util.List;
 
 /** Custom PathPlanner version of SwerveControllerCommand */
 public class PathGenerator {
+    public static boolean  ran = false;
     public static PathPlannerTrajectory generatePath(PathConstraints constraints,Node endTarget, List<Obstacle> obstacles){
         List<Node> fullPath = new ArrayList<Node>();
 
@@ -28,30 +29,29 @@ public class PathGenerator {
         VisGraph aStar = VisGraph.getInstance();
         List<PathPoint> fullPathPoints = new ArrayList<PathPoint>();
 
-        aStar.addNode(endTarget);
-    //SetUp AStar Map
-    aStar.addNode(new Node(2.92-.6,1.51-.6));
-    aStar.addNode(new Node(2.92-0.6,3.98+0.6));
-    aStar.addNode(new Node(4.86+0.6,3.98+0.6));
-    aStar.addNode(new Node(4.86+0.6,1.51-.6));
 
-    aStar.addNode(new Node(11.68-0.6,1.51-0.6));
-    aStar.addNode(new Node(11.65-0.6,5));
-    aStar.addNode(new Node(14.2,4.4));
-    aStar.addNode(new Node(14.23+0.6,1.51-0.6));
+    aStar.addNode(endTarget);
 
-    //aStar.addNode(new Node(14.07,4.50));
+        if(!ran){
+        aStar.addNode(new Node(2.92-.6,1.51-.6));
+        aStar.addNode(new Node(2.92-0.6,3.98+0.6));
+        aStar.addNode(new Node(4.86+0.6,3.98+0.6));
+        aStar.addNode(new Node(4.86+0.6,1.51-.6));
 
+        aStar.addNode(new Node(11.68-0.6,1.51-0.6));
+        aStar.addNode(new Node(11.68-0.6,4.4));
+        aStar.addNode(new Node(14.2,4.4));
+        aStar.addNode(new Node(14.2,1.51-0.6));
 
-    aStar.addNode(new Node(1.22-0.42, 5.34-0.42));
-    aStar.addNode(new Node(1.22-0.42, 5.70+0.42));
-    aStar.addNode(new Node(3.26+0.8, 5.34+0.5));
-    aStar.addNode(new Node(3.26+0.8, 5.7-0.5));
+        aStar.addNode(new Node(1.22-0.5, 5.34-0.5));
+        aStar.addNode(new Node(1.22-0.5, 5.7+0.5));
+        aStar.addNode(new Node(3.26+0.8, 5.34+0.5));
+        aStar.addNode(new Node(3.26+0.8, 5.7-0.5));
 
-    aStar.addNode(new Node(13.22, 5.34-0.42));
-    aStar.addNode(new Node(13.22, 5.70+0.42));
-    aStar.addNode(new Node(17, 5.34+0.5));
-    aStar.addNode(new Node(17, 5.7-0.5));
+        aStar.addNode(new Node(13, 5.34-0.6));
+        aStar.addNode(new Node(13, 5.70+0.6));
+        aStar.addNode(new Node(17, 5.34+0.6));
+        aStar.addNode(new Node(17, 5.7-0.6));}
 
     for(int i = 0; i<aStar.getNodeSize();i++){
       Node startNode = aStar.getNode(i);
@@ -92,6 +92,7 @@ public class PathGenerator {
             }
             
         }
+        ran = true;
         for(int i = 0; i < fullPath.size(); i++){
             Logger.getInstance().recordOutput("point"+i,Pose2d.fromTranslation(fullPath.get(i).getTranslation()).toWPI());
         }
@@ -101,6 +102,5 @@ public class PathGenerator {
         }
         
     }
-   
     
 }

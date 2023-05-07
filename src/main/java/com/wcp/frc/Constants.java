@@ -287,8 +287,8 @@ public class Constants {
             public static final Translation2d[] wallCorners = new Translation2d[] {
                 new Translation2d(3.5, 5.34),
                 new Translation2d(3.5, 5.70),
-                new Translation2d(0, 5.34),
-                new Translation2d(0, 5.70)
+                new Translation2d(-100, 5.34),
+                new Translation2d(-100, 5.70)
         }; 
     
             // Cable bump
@@ -510,7 +510,7 @@ public class Constants {
                     FieldConstants.Community.wallCorners[1].getY(),
                     FieldConstants.Community.wallCorners[3].getY(),
                     FieldConstants.Community.wallCorners[2].getY()
-                }).offset(0.3),
+                }).offset(0.5),
                 new Obstacle(new double[] {
                     allianceFlip(FieldConstants.Community.wallCorners[2]).getX(),
                     allianceFlip(FieldConstants.Community.wallCorners[3]).getX(),

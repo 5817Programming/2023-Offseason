@@ -213,7 +213,7 @@ public class Controls {
         // lights.setLights(codriverRightBumperTAtransformByLeftBumperTAP);
 
         
-        sim = Pose2d.fromTranslation(sim.getTranslation().translateBy(new Translation2d(driverLeftXInput,driverLeftYInput)));
+        sim = Pose2d.fromTranslation(sim.getTranslation().translateBy(new Translation2d(driverLeftXInput/5,driverLeftYInput/5)));
         Logger.getInstance().recordOutput("pose",sim.toWPI());
         swerve.resetPose(sim);
     
