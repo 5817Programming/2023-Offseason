@@ -28,6 +28,12 @@ public class Scores extends SubsystemBase {
   public  Scores() {
 
   }
+  public static Scores instance = null;
+  public static Scores getInstance() {
+      if(instance == null)
+          instance = new Scores();
+      return instance;
+  }
 
   @Override
   public void periodic() {

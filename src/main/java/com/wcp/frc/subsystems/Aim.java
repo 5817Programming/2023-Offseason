@@ -11,11 +11,13 @@ import com.pathplanner.lib.PathPlannerTrajectory;
 import com.wcp.lib.util.PathFollower;
 import com.wcp.lib.util.PathGenerator;
 import com.wcp.frc.Constants;
+import com.wcp.frc.subsystems.gyros.Gyro;
 import com.wcp.lib.geometry.Rotation2d;
 import com.wcp.lib.geometry.Translation2d;
 import com.wcp.lib.geometry.HeavilyInspired.Node;
 import com.wcp.lib.util.SynchronousPIDF;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
@@ -32,10 +34,17 @@ public class Aim extends SubsystemBase {
   double yError;
   SynchronousPIDF xPID;
   SynchronousPIDF yPID;
+  PIDController thetaController;
+  PIDController advanceController;
   double lastTimeStamp = 0;
   PathFollower scuffedPathPlanner = PathFollower.getInstance();
   double Roboty;
   double Robotx;
+  Vision vision = Vision.getInstance();
+  Scores scores = Scores.getInstance();
+  double xERROR;
+  double yERROR;
+
   
   public static Aim instance = null;
 
@@ -53,8 +62,12 @@ public class Aim extends SubsystemBase {
     swerve = Swerve.getInstance();
      xPID = new SynchronousPIDF(.5, 0.0, 0);
      yPID = new SynchronousPIDF(.5, 0.0, 0);
+     
 
-  }
+     thetaController = new PIDController(0.5, 0, 0);
+     advanceController = new PIDController(0.5, 0, 0);
+
+    }
 
   
 
@@ -142,6 +155,23 @@ public class Aim extends SubsystemBase {
   }
   }
   
+  }
+  public void goToObject(){
+    //makes sure we have can see a target
+    vision.setPipeline(Constants.VisionConstants.CONE_PIPELNE);
+    if(!vision.hasTarget()){//if we cant see a cone we will look for a cube
+      vision.setPipeline(Constants.VisionConstants.CUBE_PIPELINE);
+      if(!vision.hasTarget()){//if we cant see a cube we will exit the function becuase we dont have anywhere to go
+        return;
+      }
+    }
+    //gets error
+    xERROR = thetaController.calculate(vision.x(),0);
+    yERROR= advanceController.calculate(vision.y(),-5);
+    //corrects for error
+    swerve.Aim(new Translation2d(xERROR,yERROR));
+    
+
   }
   
 }

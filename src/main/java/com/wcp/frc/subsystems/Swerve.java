@@ -166,7 +166,10 @@ modules = Arrays.asList(frontRightModule, frontLeftModule, rearLeftModule, rearR
         this.aimingVector = aimingVector;
         targetHeading = rotation;
     }
-
+    public void Aim(Translation2d aimingVector){
+        currentState = State.AIM;
+        this.aimingVector = aimingVector;
+    }
 
 
     public void commandModuleDrivePowers(double power) {
