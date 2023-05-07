@@ -30,15 +30,15 @@ public class PathGenerator {
 
         aStar.addNode(endTarget);
     //SetUp AStar Map
-    aStar.addNode(new Node(2.92-0.42,1.51-0.42));
-    aStar.addNode(new Node(2.92-0.42,3.98+0.42));
-    aStar.addNode(new Node(4.86+0.42,3.98+0.42));
-    aStar.addNode(new Node(4.86+0.42,1.51-0.42));
+    aStar.addNode(new Node(2.92-.6,1.51-.6));
+    aStar.addNode(new Node(2.92-0.6,3.98+0.6));
+    aStar.addNode(new Node(4.86+0.6,3.98+0.6));
+    aStar.addNode(new Node(4.86+0.6,1.51-.6));
 
-    aStar.addNode(new Node(11.68-0.42,1.51-0.42));
-    aStar.addNode(new Node(11.65-0.42,5));
+    aStar.addNode(new Node(11.68-0.6,1.51-0.6));
+    aStar.addNode(new Node(11.65-0.6,5));
     aStar.addNode(new Node(14.2,4.4));
-    aStar.addNode(new Node(14.23+0.42,1.51-0.42));
+    aStar.addNode(new Node(14.23+0.6,1.51-0.6));
 
     //aStar.addNode(new Node(14.07,4.50));
 
@@ -72,7 +72,9 @@ public class PathGenerator {
             }
             fullPath = aStar.findPath(start, endTarget);
         }
-        edu.wpi.first.math.geometry.Rotation2d Heading = new Rotation2d(fullPath.get(1).getX()-start.getX(),fullPath.get(1).getY()-start.getY()).toWPI();
+
+        if(fullPath != null){
+            edu.wpi.first.math.geometry.Rotation2d Heading = new Rotation2d(fullPath.get(1).getX()-start.getX(),fullPath.get(1).getY()-start.getY()).toWPI();
 
         for(int i = 0; i < fullPath.size(); i++){
             if(i == 0){
@@ -94,6 +96,10 @@ public class PathGenerator {
             Logger.getInstance().recordOutput("point"+i,Pose2d.fromTranslation(fullPath.get(i).getTranslation()).toWPI());
         }
         return PathPlanner.generatePath(constraints,fullPathPoints);
+        }else{
+            return new PathPlannerTrajectory();
+        }
+        
     }
    
     

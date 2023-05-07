@@ -123,6 +123,7 @@ public class Robot extends LoggedRobot {
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
+    controls.update();
     PathPlannerTrajectory toGrid = PathGenerator.generatePath(new PathConstraints(4, 4), new Node(new Translation2d(2.07,2.85),new Rotation2d(-180)),Constants.FieldConstants.obstacles);
     Logger.getInstance().recordOutput("toGrid", toGrid);
   }

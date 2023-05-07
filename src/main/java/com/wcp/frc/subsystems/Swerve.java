@@ -46,6 +46,7 @@ public class Swerve extends Subsystem {
     public double targetHeading;
     public double rotationScalar;
 
+
     Pose2d pose = new Pose2d(5,5,new Rotation2d());
     private State currentState = State.MANUAL;
     List<Translation2d> moduleVectors;
@@ -110,7 +111,7 @@ public class Swerve extends Subsystem {
 
     }
     public Pose2d getPose(){
-        return new Pose2d(14.5,2, new Rotation2d());
+        return pose;
     }
    
     public void parkMode(){
@@ -198,7 +199,7 @@ public class Swerve extends Subsystem {
 
     public void resetPose(Pose2d newPose){
 
-        
+        pose = newPose;
     }
 
     @Override
