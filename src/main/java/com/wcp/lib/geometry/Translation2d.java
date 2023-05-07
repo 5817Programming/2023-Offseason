@@ -40,6 +40,7 @@ public class Translation2d extends edu.wpi.first.math.geometry.Translation2d{
     public double norm() {
         return Math.hypot(m_x, m_y);
     }
+
     @Override
     public double getX() {
         return m_x;
@@ -47,6 +48,11 @@ public class Translation2d extends edu.wpi.first.math.geometry.Translation2d{
     @Override
     public double getY() {
         return m_y;
+    }
+    
+    public double x() {
+        return mX;
+
     }
     public Rotation2d angleToOther(Translation2d other){
         double deltax = m_x - other.m_x;

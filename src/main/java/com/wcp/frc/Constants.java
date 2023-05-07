@@ -33,13 +33,21 @@ public class Constants {
     public static final double mRobotHypot = Math.hypot(mRobotBaseWidth,mRobotBaseLength)*2;
 
     public static final double kOuterWheelDriveDiameter = 4.0;
+    public static final double mRobotBaseWidth = Units.inchesToMeters(29); //The Robot Wheel Base Width
+    public static final double mRobotBaseLength = Units.inchesToMeters(29);//The Robot Wheel Base Length
+
+
     ///-------Swerve Values-------///
     //The positions of the modules, relative to the robot's center
     public static final Translation2d kFrontRightPosition = new Translation2d(kRobotBaseWidth / 2, kRobotBaseLength / 2);
     public static final Translation2d kFrontLeftPosition = new Translation2d(kRobotBaseWidth / 2, -kRobotBaseLength / 2);
     public static final Translation2d kRearLeftPosition = new Translation2d(-kRobotBaseWidth / 2, -kRobotBaseLength / 2);
     public static final Translation2d kRearRightPosition = new Translation2d(-kRobotBaseWidth / 2, kRobotBaseLength / 2);
-    
+    public static final Translation2d mFrontRightPosition = new Translation2d(mRobotBaseWidth / 2, mRobotBaseLength / 2);
+    public static final Translation2d mFrontLeftPosition = new Translation2d(mRobotBaseWidth / 2, -mRobotBaseLength / 2);
+    public static final Translation2d mRearLeftPosition = new Translation2d(-mRobotBaseWidth / 2, -mRobotBaseLength / 2);
+    public static final Translation2d mRearRightPosition = new Translation2d(-mRobotBaseWidth / 2, mRobotBaseLength / 2);
+
     public static final List<Translation2d> kModulePositions = Arrays.asList(kFrontRightPosition, kFrontLeftPosition, kRearLeftPosition, kRearRightPosition); 
 
     public static  double kSwerveRotationMaxSpeed = 12720.0 * 0.8;//trigger changes this in controls kinda ghetto ngl
@@ -69,6 +77,7 @@ public class Constants {
 
 
     public final int hold = 0;
+    public static final double kWheelCircumference = Units.inchesToMeters(kOuterWheelDriveDiameter*Math.PI);
 
 
     public final double mid_score = 0;
@@ -76,7 +85,11 @@ public class Constants {
 
     public final double high_score = 0;
 
-
+    	//Scrub Factors
+        public static final boolean kSimulateReversedCarpet = false;
+        public static final double[] kWheelScrubFactors = new double[]{1.0, 1.0, 1.0, 1.0};
+        public static final double kXScrubFactor = 1.0 / (1.0 - (9549.0 / 293093.0));
+        public static final double kYScrubFactor = 1.0 / (1.0 - (4.4736 / 119.9336));
     public final double low_score = 0;
 
 

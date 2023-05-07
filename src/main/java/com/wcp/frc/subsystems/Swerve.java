@@ -4,8 +4,11 @@
 
 package com.wcp.frc.subsystems;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import org.littletonrobotics.junction.Logger;
 
 import com.ctre.phoenix.motorcontrol.TalonFXInvertType;
 import com.wcp.frc.Constants;
@@ -15,10 +18,12 @@ import com.wcp.frc.subsystems.gyros.Pigeon;
 import com.wcp.lib.HeadingController;
 import com.wcp.lib.SwerveInverseKinematics;
 import com.wcp.lib.geometry.Pose2d;
+
 import com.wcp.lib.geometry.Rotation2d;
 import com.wcp.lib.geometry.Translation2d;
 import com.wcp.lib.util.Util;
 
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -41,10 +46,15 @@ public class Swerve extends Subsystem {
 
     Translation2d translationVector;
     Translation2d aimingVector  = new Translation2d();
+    Pose2d drivingpose = new Pose2d();
+
     public double aimScalar = 0;
     public double snapAngle = 0;
     public double targetHeading;
     public double rotationScalar;
+    double distanceTraveled;
+	double currentVelocity = 0;
+	double lastUpdateTimestamp = 0;
 
 
     Pose2d pose = new Pose2d(5,5,new Rotation2d());
@@ -53,26 +63,32 @@ public class Swerve extends Subsystem {
     final double translationDeadband = 0.1;
     final double rotationDeadband = 0.1;
     private boolean robotCentric = false;
+    List<SwerveDriveModule> positionModules;
 
     SwerveInverseKinematics inverseKinematics = new SwerveInverseKinematics();
     HeadingController headingController = new HeadingController();
 
     public Swerve() {
-        frontRightModule = new SwerveDriveModule(Ports.FRONT_RIGHT_ROTATION, Ports.FRONT_RIGHT_DRIVE, 0, Constants.kFrontRightStartingEncoderPosition, Constants.kFrontRightPosition, true);
-        frontLeftModule = new SwerveDriveModule(Ports.FRONT_LEFT_ROTATION, Ports.FRONT_LEFT_DRIVE, 1, Constants.kFrontLeftStartingEncoderPosition, Constants.kFrontLeftPosition, true);
-        rearLeftModule = new SwerveDriveModule(Ports.REAR_LEFT_ROTATION, Ports.REAR_LEFT_DRIVE, 2, Constants.kRearLeftStartingEncoderPosition, Constants.kRearLeftPosition, true);
-        rearRightModule = new SwerveDriveModule(Ports.REAR_RIGHT_ROTATION, Ports.REAR_RIGHT_DRIVE, 3, Constants.kRearRightStartingEncoderPosition, Constants.kRearRightPosition, true);
-        modules = Arrays.asList(frontRightModule, frontLeftModule, rearLeftModule, rearRightModule);
-
+        frontRightModule = new SwerveDriveModule(Ports.FRONT_RIGHT_ROTATION, Ports.FRONT_RIGHT_DRIVE, 0,
+        Constants.kFrontRightStartingEncoderPosition, Constants.kFrontRightPosition, true,Constants.mFrontRightPosition);
+frontLeftModule = new SwerveDriveModule(Ports.FRONT_LEFT_ROTATION, Ports.FRONT_LEFT_DRIVE, 1,
+        Constants.kFrontLeftStartingEncoderPosition, Constants.kFrontLeftPosition, true,Constants.mFrontLeftPosition);
+rearLeftModule = new SwerveDriveModule(Ports.REAR_LEFT_ROTATION, Ports.REAR_LEFT_DRIVE, 2,
+        Constants.kRearLeftStartingEncoderPosition, Constants.kRearLeftPosition, true,Constants.mRearLeftPosition);
+rearRightModule = new SwerveDriveModule(Ports.REAR_RIGHT_ROTATION, Ports.REAR_RIGHT_DRIVE, 3,
+        Constants.kRearRightStartingEncoderPosition, Constants.kRearRightPosition, true,Constants.mRearRightPosition);
+modules = Arrays.asList(frontRightModule, frontLeftModule, rearLeftModule, rearRightModule);
         frontRightModule.invertDriveMotor(TalonFXInvertType.Clockwise);
 		frontLeftModule.invertDriveMotor(TalonFXInvertType.CounterClockwise);
 		rearLeftModule.invertDriveMotor(TalonFXInvertType.CounterClockwise);
 		rearRightModule.invertDriveMotor(TalonFXInvertType.Clockwise);
+        positionModules = Arrays.asList(frontRightModule, frontLeftModule, rearLeftModule, rearRightModule);
 
         pigeon = Pigeon.getInstance();
         pigeon.setAngle(0);
 
-    
+        modules.forEach((m) -> m.resetPose(new Pose2d(new Translation2d(5,5),new Rotation2d())));
+
     }
 
     public enum State {
@@ -108,6 +124,7 @@ public class Swerve extends Subsystem {
             this.update(Timer.getFPGATimestamp());
 
         }
+
 
     }
     public Pose2d getPose(){
@@ -157,6 +174,11 @@ public class Swerve extends Subsystem {
             modules.get(i).setDriveOpenLoop(power);
         }
     }
+    public void updateOdometry(double timestamp) {// uses sent input to commad modules and correct for rotatinol drift
+
+        lastUpdateTimestamp = timestamp;
+    
+        }
 
 
 
@@ -166,36 +188,90 @@ public class Swerve extends Subsystem {
     public Rotation2d getRobotHeading() {
         return Rotation2d.fromDegrees(pigeon.getAngle());
     }
+    public void fieldzeroSwerve() {// starts the zero 180 off
+        headingController.setTargetHeading(Rotation2d.fromDegrees(-180));
+        pigeon.setAngle(-180);
+    }
     
     public void update(double timestamp) {
-        pose = Pose2d.fromRotaiton(getRobotHeading());
-        if(currentState == State.MANUAL ){
+        drivingpose = Pose2d.fromRotaiton(getRobotHeading());
+        // if(currentState == State.MANUAL ){
             
-            double rotationCorrection =  headingController.updateRotationCorrection(pose.getRotation(), timestamp);
+            double rotationCorrection =  headingController.updateRotationCorrection(drivingpose.getRotation(), timestamp);
         if(translationVector.norm() == 0 || rotationScalar != 0) {
             rotationCorrection = 0;
         }
         SmartDashboard.putNumber("Swerve Heading Correctiomm    33  33   /n", rotationCorrection);
-        commandModules(inverseKinematics.updateDriveVectors(translationVector, rotationScalar + rotationCorrection, pose, robotCentric));
-        }
-        if(currentState == State.AIM){
-            headingController.setTargetHeading(Rotation2d.fromDegrees(targetHeading));
-            double rotationCorrection = headingController.getRotationCorrection(getRobotHeading(), timestamp);
-            if(translationVector.norm() == 0 || rotationScalar != 0) {
-                rotationCorrection = 0;
-            }
-            SmartDashboard.putNumber("Swerve Heading Correctiomm    33  33   /n", rotationCorrection);
-            commandModules(inverseKinematics.updateDriveVectors(aimingVector, rotationCorrection, pose, robotCentric));
-        }
-        if(currentState == State.SNAP){
-            headingController.setTargetHeading(Rotation2d.fromDegrees(targetHeading));
-            double rotationCorrection =  headingController.getRotationCorrection(pose.getRotation(), timestamp);
+        commandModules(inverseKinematics.updateDriveVectors(translationVector, rotationScalar + rotationCorrection, drivingpose, robotCentric));
+        // }
+        // if(currentState == State.AIM){
+        //     headingController.setTargetHeading(Rotation2d.fromDegrees(targetHeading));
+        //     double rotationCorrection = headingController.getRotationCorrection(getRobotHeading(), timestamp);
+        //     if(translationVector.norm() == 0 || rotationScalar != 0) {
+        //         rotationCorrection = 0;
+        //     }
+        //     SmartDashboard.putNumber("Swerve Heading Correctiomm    33  33   /n", rotationCorrection);
+        //     commandModules(inverseKinematics.updateDriveVectors(aimingVector, rotationCorrection, drivingpose, robotCentric));
+        // }
+        // if(currentState == State.SNAP){
+        //     headingController.setTargetHeading(Rotation2d.fromDegrees(targetHeading));
+        //     double rotationCorrection =  headingController.getRotationCorrection(drivingpose.getRotation(), timestamp);
         
-        SmartDashboard.putNumber("Swerve Heading Correctiomm    33  33   /n", rotationCorrection);
-        commandModules(inverseKinematics.updateDriveVectors(translationVector, rotationCorrection, pose, robotCentric));
+        // SmartDashboard.putNumber("Swerve Heading Correctiomm    33  33   /n", rotationCorrection);
+        // commandModules(inverseKinematics.updateDriveVectors(translationVector, rotationCorrection, drivingpose, robotCentric));
         
-        }
+        // }
     }
+    /** The tried and true algorithm for keeping track of position */
+	public synchronized void updatePose(double timestamp){
+		double x = 0.0;
+		double y = 0.0;
+		Rotation2d heading = getRobotHeading();
+		
+		double averageDistance = 0.0;
+		double[] distances = new double[4];
+		for(SwerveDriveModule m : positionModules){
+			m.updatePose(heading);
+			double distance = m.getEstimatedRobotPose().getTranslation().translateBy(pose.getTranslation().inverse()).norm();
+			distances[m.moduleID] = distance;
+			averageDistance += distance;
+		}
+		averageDistance /= positionModules.size();
+		
+		int minDevianceIndex = 0;
+		double minDeviance = Units.inchesToMeters(100);
+		List<SwerveDriveModule> modulesToUse = new ArrayList<>();
+		for(SwerveDriveModule m : positionModules){
+				double deviance = Math.abs(distances[m.moduleID] - averageDistance);
+				if(deviance < minDeviance){
+					minDeviance = deviance;
+					minDevianceIndex = m.moduleID;
+				}
+				if(deviance <= 0.05){
+					modulesToUse.add(m);
+				}
+			}
+		
+		if(modulesToUse.isEmpty()){
+			modulesToUse.add(modules.get(minDevianceIndex));
+		}
+		
+
+
+		//SmartDashboard.putNumber("Modules Used", modulesToUse.size());
+		
+		for(SwerveDriveModule m : modulesToUse){
+			x += m.getEstimatedRobotPose().getTranslation().x();
+			y += m.getEstimatedRobotPose().getTranslation().y();
+		}
+		Pose2d updatedPose = new Pose2d(new Translation2d(x / modulesToUse.size(), y / modulesToUse.size()), heading);
+		double deltaPos = updatedPose.getTranslation().translateBy(pose.getTranslation().inverse()).norm();
+        Logger.getInstance().recordOutput("delta pose", deltaPos);
+		distanceTraveled += deltaPos;
+		currentVelocity = deltaPos / (timestamp - lastUpdateTimestamp);
+		pose = updatedPose;
+		modules.forEach((m) -> m.resetPose(pose));
+	}
 
     public void resetPose(Pose2d newPose){
 
@@ -218,8 +294,11 @@ public class Swerve extends Subsystem {
 
     @Override
     public void outputTelemetry() {
+        edu.wpi.first.math.geometry.Pose2d pose2d = new edu.wpi.first.math.geometry.Pose2d(pose.getTranslation().x(),pose.getTranslation().y(),Rotation2d.fromDegrees(pigeon.getAngle()));
         modules.forEach((m) -> {m.outputTelemetry();});
         SmartDashboard.putNumber("Robot Heading", getRobotHeading().getDegrees());
+        Logger.getInstance().recordOutput("Odometry",pose2d);
+
     }
 
     @Override
