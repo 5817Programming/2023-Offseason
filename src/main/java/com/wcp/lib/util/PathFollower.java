@@ -1,41 +1,25 @@
 package com.wcp.lib.util;
 
 import com.pathplanner.lib.PathPlannerTrajectory;
-import com.pathplanner.lib.PathPlannerTrajectory.EventMarker;
 import com.pathplanner.lib.PathPlannerTrajectory.PathPlannerState;
-import com.pathplanner.lib.controllers.PPHolonomicDriveController;
-import com.pathplanner.lib.server.PathPlannerServer;
 import com.wcp.lib.geometry.Pose2d;
 import com.wcp.lib.geometry.Rotation2d;
 import com.wcp.lib.geometry.Translation2d;
 
-import edu.wpi.first.math.controller.PIDController;
-
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
-import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.*;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.function.BiConsumer;
-import java.util.function.Consumer;
-import java.util.function.Supplier;
-
 import org.littletonrobotics.junction.Logger;
 
 /** Custom PathPlanner version of SwerveControllerCommand */
-public class ScuffedPathPlanner extends SubsystemBase {
+public class PathFollower extends SubsystemBase {
   private final Timer timer = new Timer();
   private final Timer waitTimer = new Timer();
 
   private PathPlannerTrajectory transformedTrajectory;
-  private PathPlannerState currentState;
   private PathPlannerState startState;
 
   double desiredRotation = 0;
@@ -52,14 +36,8 @@ public class ScuffedPathPlanner extends SubsystemBase {
 
   
 
-  private static Consumer<PathPlannerTrajectory> logActiveTrajectory = null;
-  private static Consumer<Pose2d> logTargetPose = null;
-  private static Consumer<ChassisSpeeds> logSetpoint = null;
-  private static BiConsumer<Translation2d, Rotation2d> logError =
-      ScuffedPathPlanner::defaultLogError;
-
   
-  public ScuffedPathPlanner() {
+  public PathFollower() {
       }
    
   public void startTimer(){
@@ -101,7 +79,6 @@ public class ScuffedPathPlanner extends SubsystemBase {
     }
 
     PathPlannerState desiredState = (PathPlannerState) transformedTrajectory.sample(currentTime);
-    currentState = desiredState;
 
 
 double desiredX = desiredState.poseMeters.getTranslation().getX();
@@ -118,11 +95,11 @@ this.desiredRotation = desiredRotation;
     
   }
   
-  public static ScuffedPathPlanner instance = null;
+  public static PathFollower instance = null;
 
-  public static ScuffedPathPlanner getInstance() {// if doesnt have an instance of swerve will make a new one
+  public static PathFollower getInstance() {// if doesnt have an instance of swerve will make a new one
     if (instance == null)
-        instance = new ScuffedPathPlanner();
+        instance = new PathFollower();
     return instance;
 }
 public double getrotation(){
@@ -198,12 +175,6 @@ public double getStartRotation(){
   }
  
 
-  private static void defaultLogError(Translation2d translationError, Rotation2d rotationError) {
-    SmartDashboard.putNumber("PPSwerveControllerCommand/xErrorMeters", translationError.getX());
-    SmartDashboard.putNumber("PPSwerveControllerCommand/yErrorMeters", translationError.getY());
-    SmartDashboard.putNumber(
-        "PPSwerveControllerCommand/rotationErrorDegrees", rotationError.getDegrees());
-  }
 
   /**
    * Set custom logging callbacks for this command to use instead of the default configuration of
@@ -218,14 +189,5 @@ public double getStartRotation(){
    * @param logError BiConsumer that accepts a Translation2d and Rotation2d representing the error
    *     while path following
    */
-  public static void setLoggingCallbacks(
-      Consumer<PathPlannerTrajectory> logActiveTrajectory,
-      Consumer<Pose2d> logTargetPose,
-      Consumer<ChassisSpeeds> logSetpoint,
-      BiConsumer<Translation2d, Rotation2d> logError) {
-    ScuffedPathPlanner.logActiveTrajectory = logActiveTrajectory;
-    ScuffedPathPlanner.logTargetPose = logTargetPose;
-    ScuffedPathPlanner.logSetpoint = logSetpoint;
-    ScuffedPathPlanner.logError = logError;
-  }
+
 }

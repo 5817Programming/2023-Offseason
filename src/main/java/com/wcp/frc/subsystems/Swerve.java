@@ -56,7 +56,8 @@ public class Swerve extends Subsystem {
 	double currentVelocity = 0;
 	double lastUpdateTimestamp = 0;
 
-    Pose2d pose = new Pose2d();
+
+    Pose2d pose = new Pose2d(5,5,new Rotation2d());
     private State currentState = State.MANUAL;
     List<Translation2d> moduleVectors;
     final double translationDeadband = 0.1;
@@ -274,7 +275,7 @@ modules = Arrays.asList(frontRightModule, frontLeftModule, rearLeftModule, rearR
 
     public void resetPose(Pose2d newPose){
 
-        
+        pose = newPose;
     }
 
     @Override

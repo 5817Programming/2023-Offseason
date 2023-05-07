@@ -10,11 +10,27 @@
       "/SmartDashboard/Auto choices": "String Chooser"
     }
   },
+  "NetworkTables": {
+    "transitory": {
+      "AdvantageKit": {
+        "open": true
+      }
+    }
+  },
   "NetworkTables Info": {
+    "AdvantageScope@1": {
+      "open": true
+    },
+    "AdvantageScope@2": {
+      "open": true
+    },
     "Clients": {
       "open": true
     },
     "Server": {
+      "Publishers": {
+        "open": true
+      },
       "open": true
     },
     "shuffleboard": {

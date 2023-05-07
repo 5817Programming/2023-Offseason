@@ -9,19 +9,22 @@ package com.wcp.lib.geometry;
 /** Add your docs here. */
 public class Pose2d extends edu.wpi.first.math.geometry.Pose2d {
 
-    protected Translation2d mTranslation;
-    protected Rotation2d mRotation;
+    protected Translation2d m_translation;
+    protected Rotation2d m_rotation;
     public Pose2d() {
-        mTranslation = new Translation2d();
-        mRotation = new Rotation2d();
+        m_translation = new Translation2d();
+        m_rotation = new Rotation2d();
     }
     public Pose2d(Translation2d translation, Rotation2d rotation) {
-        mTranslation = translation;
-        mRotation = rotation;
+        m_translation = translation;
+        m_rotation = rotation;
     }
         public Pose2d(double x, double y, Rotation2d rotation) {
-        mTranslation = new Translation2d(x,y);
-        mRotation = rotation;
+        m_translation = new Translation2d(x,y);
+        m_rotation = rotation;
+    }
+            public  edu.wpi.first.math.geometry.Pose2d toWPI() {
+        return new edu.wpi.first.math.geometry.Pose2d(m_translation.m_x, m_translation.m_y, m_rotation);
     }
     public static Pose2d fromTranslation(final Translation2d translation) {
         return new Pose2d(translation, new Rotation2d());
@@ -30,6 +33,13 @@ public class Pose2d extends edu.wpi.first.math.geometry.Pose2d {
     public static Pose2d fromRotaiton(final Rotation2d rotation) {
         return new Pose2d(new Translation2d(), rotation);
     }
+        public static edu.wpi.first.math.geometry.Pose2d toWPI(Translation2d translation, Rotation2d rotation) {
+        return new Pose2d(translation, rotation);
+    }
+    public static edu.wpi.first.math.geometry.Pose2d toWPI(Translation2d translation) {
+        return new Pose2d(translation, new Rotation2d());
+        }
+
             /**
      * The inverse of this transform "undoes" the effect of translating by this transform.
      *
@@ -38,15 +48,25 @@ public class Pose2d extends edu.wpi.first.math.geometry.Pose2d {
     public Pose2d inverse() {
         Rotation2d rotation_inverted = mRotation.inverse();
         return new Pose2d(mTranslation.inverse().rotateBy(rotation_inverted), rotation_inverted);
+
     }
     @Override
     public Rotation2d getRotation() {
-        return this.mRotation;
+        return this.m_rotation;
     }
+    @Override
+    public double getX(){
+        return m_translation.m_x;
+    }
+    @Override
+    public double getY(){
+        return m_translation.m_y;
+    }
+    
     
     @Override
     public Translation2d getTranslation() {
-        return this.mTranslation;
+        return this.m_translation;
     }
         /**
      * Transforming this RigidTransform2d means first translating by other.translation and then rotating by

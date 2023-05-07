@@ -7,6 +7,24 @@ package com.wcp.frc;
 import java.util.Arrays;
 
 import org.littletonrobotics.junction.LoggedRobot;
+import org.littletonrobotics.junction.Logger;
+import org.littletonrobotics.junction.networktables.NT4Publisher;
+
+import com.pathplanner.lib.PathConstraints;
+import com.pathplanner.lib.PathPlannerTrajectory;
+import com.wcp.frc.subsystems.SubsystemManager;
+import com.wcp.frc.subsystems.Swerve;
+import com.wcp.frc.subsystems.Vision;
+import com.wcp.lib.geometry.Rotation2d;
+import com.wcp.lib.geometry.Translation2d;
+import com.wcp.lib.geometry.HeavilyInspired.Node;
+import com.wcp.lib.util.PathGenerator;
+
+import edu.wpi.first.wpilibj.PowerDistribution;
+import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+=======
 
 import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.NT4Publisher;
@@ -30,15 +48,24 @@ import edu.wpi.first.wpilibj2.command.Command;
 //https://github.com/Mechanical-Advantage/AdvantageKit/releases/latest/download/AdvantageKit.json
 
 //https://maven.photonvision.org/repository/internal/org/photonvision/PhotonLib-json/1.0/PhotonLib-json-1.0.json
+
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
 public class Robot extends LoggedRobot {
+
+
+public class Robot extends LoggedRobot {
+  private static final String kDefaultAuto = "Default";
+  private static final String kCustomAuto = "My Auto";
+  private String m_autoSelected;
+  private final SendableChooser<String> m_chooser = new SendableChooser<>();
 
   // private RobotContainer robotContainer = new RobotContainer();
 
   // RobotContainer robotContainer = new RobotContainer();
   private Command colorChooser;
   Controls controls;
+  PathGenerator scuffedPathGenerator;
   SubsystemManager subsystemManager;
   Swerve swerve;
   double yaw;
@@ -55,7 +82,17 @@ public class Robot extends LoggedRobot {
       // Logger.getInstance().addDataReceiver(new WPILOGWriter("/media/sda1/")); // Log to a USB stick
       Logger.getInstance().addDataReceiver(new NT4Publisher()); // Publish data to NetworkTables
       new PowerDistribution(1, ModuleType.kRev); // Enables power distribution logging
-    
+
+    // Logger.getInstance().disableDeterministicTimestamps() // See "Deterministic
+    // Timestamps" in the "Understanding Data Flow" page
+    Logger.getInstance().start(); 
+    m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
+    m_chooser.addOption("My Auto", kCustomAuto);
+    SmartDashboard.putData("Auto choices", m_chooser);
+
+    controls = Controls.getInstance();
+    swerve = Swerve.getInstance();
+
     
     // Logger.getInstance().disableDeterministicTimestamps() // See "Deterministic
     // Timestamps" in the "Understanding Data Flow" page
@@ -69,6 +106,7 @@ public class Robot extends LoggedRobot {
     swerve = Swerve.getInstance();
     vision = Vision.getInstance();
     
+
     subsystemManager = new SubsystemManager();
     subsystemManager.addSystems(Arrays.asList(
         swerve));
@@ -88,7 +126,7 @@ public class Robot extends LoggedRobot {
    */
   @Override
   public void robotPeriodic() {
-swerve.updateOdometry(defaultPeriodSecs);
+    swerve.updateOdometry(defaultPeriodSecs);
     elevator.getEncoder();
     arm.getEncoder();
 
@@ -158,6 +196,11 @@ swerve.updateOdometry(defaultPeriodSecs);
   /** This function is called once when teleop is enabled. */
   @Override
   public void teleopInit() {
+
+   
+     System.out.println("run");
+    
+=======
     // scores.zero();
     swerve = Swerve.getInstance();
     swerve.fieldzeroSwerve();
@@ -165,13 +208,24 @@ swerve.updateOdometry(defaultPeriodSecs);
 
     // vision.range(1);
 
+
   }
+  double lastTime;
 
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
     controls.update();
+
+    double currentTime = Timer.getFPGATimestamp();
+    if(currentTime - lastTime > .3){
+    PathPlannerTrajectory toGrid = PathGenerator.generatePath(new PathConstraints(4, 4), new Node(new Translation2d(14.3,2.85),new Rotation2d(-180)),Constants.FieldConstants.obstacles);
+    Logger.getInstance().recordOutput("toGrid", toGrid);
+    lastTime = currentTime;
+    }
+
     //swerve.update(Timer.getFPGATimestamp());
+
   }
 
   /** This function is called once when the robot is disabled. */

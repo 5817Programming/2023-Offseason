@@ -4,8 +4,6 @@
 
 package com.wcp.frc.subsystems;
 
-import com.wcp.frc.Constants;
-import com.wcp.frc.Controls;
 import com.wcp.frc.subsystems.Scores.State;
 
 import edu.wpi.first.wpilibj2.command.InstantCommand;

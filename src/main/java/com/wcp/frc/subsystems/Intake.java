@@ -5,13 +5,11 @@
 package com.wcp.frc.subsystems;
 
 
-import java.security.DrbgParameters.Reseed;
 import org.littletonrobotics.junction.Logger;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
-import com.wcp.frc.Controls;
 import com.wcp.frc.Ports;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 

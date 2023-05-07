@@ -11,13 +11,17 @@ import com.wcp.frc.subsystems.SideElevator;
 import com.wcp.frc.subsystems.Swerve;
 import com.wcp.frc.subsystems.Vision;
 import com.wcp.frc.subsystems.Swerve.State;
-import com.wcp.lib.HeadingController;
-import com.wcp.lib.geometry.Rotation2d;
+import com.wcp.lib.geometry.Pose2d;
+import com.wcp.lib.geometry.Translation2d;
+
+import org.littletonrobotics.junction.Logger;
+
 // import com.wcp.frc.subsystems.toHuman;
 import com.wcp.frc.subsystems.Aim;
 import com.wcp.frc.subsystems.Lights;
 import com.wcp.frc.subsystems.Scores;
 
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.XboxController;
 
 
@@ -53,6 +57,8 @@ public class Controls {
     int pipeline;
     double elevatorstate;
     boolean cube= true;
+
+    Pose2d sim = new Pose2d();
 
     private static Controls instance = null;
     public static Controls getInstance() {
@@ -166,11 +172,6 @@ public class Controls {
 
 
 
-        if (driverAButton) {
-
-        }
-        
-     
 
         if (coDriverAButton || coDriverBButton || coDriverXButton || coDriverYButton || coDriverBackButton || coDriverLeftStickDown
                 || codriverLeftBumperTAP) {
@@ -208,9 +209,13 @@ public class Controls {
         }
       
        // vision.getHeight(driverLeftTrigger, driverightTrigger);
-        lights.setLights(codriverRightBumperTAP, codriverLeftBumperTAP);
+
+        // lights.setLights(codriverRightBumperTAtransformByLeftBumperTAP);
 
         
+        sim = Pose2d.fromTranslation(sim.getTranslation().translateBy(new Translation2d(driverLeftXInput/5,driverLeftYInput/5)));
+        Logger.getInstance().recordOutput("pose",sim.toWPI());
+        swerve.resetPose(sim);
     
 
 
