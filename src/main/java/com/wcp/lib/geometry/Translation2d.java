@@ -48,6 +48,11 @@ public class Translation2d extends edu.wpi.first.math.geometry.Translation2d{
     public double getY() {
         return m_y;
     }
+    public Rotation2d angleToOther(Translation2d other){
+        double deltax = m_x - other.m_x;
+        double deltay = m_y = other.m_y;
+        return new Translation2d(deltax,deltay).getAngle();
+    }
     
     public static edu.wpi.first.math.geometry.Translation2d toWPI(double x, double y){
         return new edu.wpi.first.math.geometry.Translation2d(x,y);

@@ -110,7 +110,7 @@ public class Swerve extends Subsystem {
 
     }
     public Pose2d getPose(){
-        return new Pose2d(6,3, new Rotation2d());
+        return new Pose2d(14.5,2, new Rotation2d());
     }
    
     public void parkMode(){

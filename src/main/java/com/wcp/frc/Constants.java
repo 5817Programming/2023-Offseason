@@ -274,10 +274,10 @@ public class Constants {
             // Charging station dimensions
             public static final double chargingStationLength = Units.inchesToMeters(76.125);
             public static final double chargingStationWidth = Units.inchesToMeters(97.25);
-            public static final double chargingStationOuterX = outerX - tapeWidth;//2.9
+            public static final double chargingStationOuterX = outerX - tapeWidth;
             public static final double chargingStationInnerX = chargingStationOuterX - chargingStationLength;
             public static final double chargingStationLeftY = midY - tapeWidth;
-            public static final double chargingStationRightY = chargingStationLeftY - chargingStationWidth;//1.44
+            public static final double chargingStationRightY = chargingStationLeftY - chargingStationWidth;
             public static final Translation2d[] chargingStationCorners = new Translation2d[] {
                     new Translation2d(chargingStationInnerX, chargingStationRightY),
                     new Translation2d(chargingStationInnerX, chargingStationLeftY),
@@ -285,10 +285,10 @@ public class Constants {
                     new Translation2d(chargingStationOuterX, chargingStationLeftY)
             };
             public static final Translation2d[] wallCorners = new Translation2d[] {
-                new Translation2d(3.26, 5.34),
-                new Translation2d(3.26, 5.70),
-                new Translation2d(1.22, 5.34),
-                new Translation2d(1.22, 5.70)
+                new Translation2d(3.5, 5.34),
+                new Translation2d(3.5, 5.70),
+                new Translation2d(0, 5.34),
+                new Translation2d(0, 5.70)
         }; 
     
             // Cable bump
@@ -486,7 +486,7 @@ public class Constants {
                         FieldConstants.Community.chargingStationCorners[1].getY(),
                         FieldConstants.Community.chargingStationCorners[3].getY(),
                         FieldConstants.Community.chargingStationCorners[2].getY()
-                })
+                }).offset(0.47)
                 ,
                 // Red Charging Station
                 new Obstacle(new double[] {
@@ -499,7 +499,7 @@ public class Constants {
                         allianceFlip(FieldConstants.Community.chargingStationCorners[3]).getY(),
                         allianceFlip(FieldConstants.Community.chargingStationCorners[1]).getY(),
                         allianceFlip(FieldConstants.Community.chargingStationCorners[0]).getY()
-                }),
+                }).offset(0.3),
                 new Obstacle(new double[] {
                     FieldConstants.Community.wallCorners[0].getX(),
                     FieldConstants.Community.wallCorners[1].getX(),
@@ -510,7 +510,7 @@ public class Constants {
                     FieldConstants.Community.wallCorners[1].getY(),
                     FieldConstants.Community.wallCorners[3].getY(),
                     FieldConstants.Community.wallCorners[2].getY()
-                }),
+                }).offset(0.3),
                 new Obstacle(new double[] {
                     allianceFlip(FieldConstants.Community.wallCorners[2]).getX(),
                     allianceFlip(FieldConstants.Community.wallCorners[3]).getX(),
@@ -521,7 +521,7 @@ public class Constants {
                     allianceFlip(FieldConstants.Community.wallCorners[3]).getY(),
                     allianceFlip(FieldConstants.Community.wallCorners[1]).getY(),
                     allianceFlip(FieldConstants.Community.wallCorners[0]).getY()
-                })
+                }).offset(0.5)
                 );
     
         /**
