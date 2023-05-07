@@ -25,6 +25,13 @@ public class Translation2d extends edu.wpi.first.math.geometry.Translation2d{
         m_x = otherVec.getX();
         m_y = otherVec.getY();
     }
+    public Translation2d minus(Translation2d other) {
+        return new Translation2d(m_x - other.m_x, m_y - other.m_y);
+      }
+    
+    public Rotation2d getAngle() {
+        return new Rotation2d(m_x, m_y);
+      }
 
     public static Translation2d fromPolar(Rotation2d direction, double magnitude) {
         return new Translation2d(direction.m_cos * magnitude, direction.m_sin * magnitude);

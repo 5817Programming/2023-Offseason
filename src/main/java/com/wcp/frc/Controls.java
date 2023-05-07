@@ -11,8 +11,6 @@ import com.wcp.frc.subsystems.SideElevator;
 import com.wcp.frc.subsystems.Swerve;
 import com.wcp.frc.subsystems.Vision;
 import com.wcp.frc.subsystems.Swerve.State;
-import com.wcp.lib.HeadingController;
-import com.wcp.lib.geometry.Rotation2d;
 // import com.wcp.frc.subsystems.toHuman;
 import com.wcp.frc.subsystems.Aim;
 import com.wcp.frc.subsystems.Lights;

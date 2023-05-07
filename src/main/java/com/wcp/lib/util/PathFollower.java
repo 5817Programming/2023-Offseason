@@ -1,32 +1,17 @@
 package com.wcp.lib.util;
 
 import com.pathplanner.lib.PathPlannerTrajectory;
-import com.pathplanner.lib.PathPlannerTrajectory.EventMarker;
 import com.pathplanner.lib.PathPlannerTrajectory.PathPlannerState;
-import com.pathplanner.lib.controllers.PPHolonomicDriveController;
-import com.pathplanner.lib.server.PathPlannerServer;
 import com.wcp.lib.geometry.Pose2d;
 import com.wcp.lib.geometry.Rotation2d;
 import com.wcp.lib.geometry.Translation2d;
 
-import edu.wpi.first.math.controller.PIDController;
-
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
-import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.*;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.function.BiConsumer;
-import java.util.function.Consumer;
-import java.util.function.Supplier;
-
 import org.littletonrobotics.junction.Logger;
 
 /** Custom PathPlanner version of SwerveControllerCommand */
@@ -35,7 +20,6 @@ public class PathFollower extends SubsystemBase {
   private final Timer waitTimer = new Timer();
 
   private PathPlannerTrajectory transformedTrajectory;
-  private PathPlannerState currentState;
   private PathPlannerState startState;
 
   double desiredRotation = 0;
@@ -51,12 +35,6 @@ public class PathFollower extends SubsystemBase {
   int EventIndex= 0;
 
   
-
-  private static Consumer<PathPlannerTrajectory> logActiveTrajectory = null;
-  private static Consumer<Pose2d> logTargetPose = null;
-  private static Consumer<ChassisSpeeds> logSetpoint = null;
-  private static BiConsumer<Translation2d, Rotation2d> logError =
-      PathFollower::defaultLogError;
 
   
   public PathFollower() {
@@ -101,7 +79,6 @@ public class PathFollower extends SubsystemBase {
     }
 
     PathPlannerState desiredState = (PathPlannerState) transformedTrajectory.sample(currentTime);
-    currentState = desiredState;
 
 
 double desiredX = desiredState.poseMeters.getTranslation().getX();
@@ -198,12 +175,6 @@ public double getStartRotation(){
   }
  
 
-  private static void defaultLogError(Translation2d translationError, Rotation2d rotationError) {
-    SmartDashboard.putNumber("PPSwerveControllerCommand/xErrorMeters", translationError.getX());
-    SmartDashboard.putNumber("PPSwerveControllerCommand/yErrorMeters", translationError.getY());
-    SmartDashboard.putNumber(
-        "PPSwerveControllerCommand/rotationErrorDegrees", rotationError.getDegrees());
-  }
 
   /**
    * Set custom logging callbacks for this command to use instead of the default configuration of
@@ -218,14 +189,5 @@ public double getStartRotation(){
    * @param logError BiConsumer that accepts a Translation2d and Rotation2d representing the error
    *     while path following
    */
-  public static void setLoggingCallbacks(
-      Consumer<PathPlannerTrajectory> logActiveTrajectory,
-      Consumer<Pose2d> logTargetPose,
-      Consumer<ChassisSpeeds> logSetpoint,
-      BiConsumer<Translation2d, Rotation2d> logError) {
-    PathFollower.logActiveTrajectory = logActiveTrajectory;
-    PathFollower.logTargetPose = logTargetPose;
-    PathFollower.logSetpoint = logSetpoint;
-    PathFollower.logError = logError;
-  }
+
 }

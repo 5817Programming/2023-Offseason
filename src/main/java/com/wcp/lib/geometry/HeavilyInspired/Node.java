@@ -4,8 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.wcp.frc.subsystems.Swerve;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
+import com.wcp.lib.geometry.Rotation2d;
+import com.wcp.lib.geometry.Translation2d;
+
 
 public class Node {
     public double x;
@@ -41,7 +42,9 @@ public class Node {
       this.neighbors = new ArrayList < > ();
     }
 
-    public void addNeighbor(Node neighbor) {
+
+
+	public void addNeighbor(Node neighbor) {
         this.neighbors.add(neighbor);
     }
     public double getX(){

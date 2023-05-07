@@ -6,17 +6,21 @@ package com.wcp.frc.subsystems;
 
 import java.lang.annotation.Target;
 
+import org.littletonrobotics.junction.Logger;
+
 import com.pathplanner.lib.PathConstraints;
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
 import com.pathplanner.lib.PathPoint;
 import com.wcp.lib.util.PathFollower;
+import com.wcp.lib.util.PathGenerator;
 import com.wcp.frc.Constants;
 import com.wcp.lib.geometry.Pose2d;
+import com.wcp.lib.geometry.Rotation2d;
 import com.wcp.lib.geometry.Translation2d;
+import com.wcp.lib.geometry.HeavilyInspired.Node;
 import com.wcp.lib.util.SynchronousPIDF;
 
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
@@ -39,6 +43,13 @@ public class Aim extends SubsystemBase {
   double Roboty;
   double Robotx;
   
+  public static Aim instance = null;
+
+  public static Aim getInstance(){
+    if(instance == null)
+      instance = new Aim();
+    return instance;
+  }
 
   double bestDistance;
 
@@ -50,6 +61,7 @@ public class Aim extends SubsystemBase {
      yPID = new SynchronousPIDF(.5, 0.0, 0);
 
   }
+
   
 
 
@@ -67,63 +79,28 @@ public class Aim extends SubsystemBase {
 
   public void goToGrid(){
     PathPlannerTrajectory toGrid;
-    double rotation = 0;
     if(!pathStarted){
-      if(Roboty>2.75){
-        if(DriverStation.getAlliance() == Alliance.Blue){
-        rotation = 180;
-      
-      toGrid = PathPlanner.generatePath(
-        new PathConstraints(4, 3), 
-        new PathPoint(swerve.getPose().getTranslation(), Rotation2d.fromDegrees(0), swerve.getPose().getRotation()),
-        new PathPoint(new Translation2d(5.35, 4.48), Rotation2d.fromDegrees(0), swerve.getPose().getRotation()),
-        new PathPoint(new Translation2d(2.39, 4.48), Rotation2d.fromDegrees(0), swerve.getPose().getRotation())
-        );
-
-      }else{
-        toGrid = PathPlanner.generatePath(
-        new PathConstraints(4, 3), 
-        new PathPoint(swerve.getPose().getTranslation(), Rotation2d.fromDegrees(0), swerve.getPose().getRotation()),
-        new PathPoint(new Translation2d(11.24, 4.48), Rotation2d.fromDegrees(0), swerve.getPose().getRotation()),
-        new PathPoint(new Translation2d(14.12, 4.48), Rotation2d.fromDegrees(0), swerve.getPose().getRotation())
-        );
-      }
-      }else{
-    if(DriverStation.getAlliance() == Alliance.Blue){
-        rotation = 180;
-      
-      toGrid = PathPlanner.generatePath(
-        new PathConstraints(4, 3), 
-        new PathPoint(swerve.getPose().getTranslation(), Rotation2d.fromDegrees(0), swerve.getPose().getRotation()),
-        new PathPoint(new Translation2d(5.39, 1.08), Rotation2d.fromDegrees(0), swerve.getPose().getRotation()),
-        new PathPoint(new Translation2d(2.39, 1.08), Rotation2d.fromDegrees(0), swerve.getPose().getRotation())
-        );
-      }else{
-        toGrid = PathPlanner.generatePath(
-        new PathConstraints(4, 3), 
-        new PathPoint(swerve.getPose().getTranslation(), Rotation2d.fromDegrees(0), swerve.getPose().getRotation()),
-        new PathPoint(new Translation2d(11.12, 1.06), Rotation2d.fromDegrees(0), swerve.getPose().getRotation()),
-        new PathPoint(new Translation2d(14.12, 1.06), Rotation2d.fromDegrees(0), swerve.getPose().getRotation())
-        );
-
-      }}
       scuffedPathPlanner.resetTimer();
-      scuffedPathPlanner.setTrajectory(toGrid);
     }
-    pathStarted = true;
-    Translation2d targetTranslation2d = scuffedPathPlanner.getDesiredPose2d(false, 1, swerve.getPose()).getTranslation();
-    double currentTime  = Timer.getFPGATimestamp();
-    double dt = currentTime-lastTimeStamp;
-    xError = xPID.calculate(Robotx-targetTranslation2d.getX(), dt);
-    yError = yPID.calculate(Roboty-targetTranslation2d.getY(), dt);
-    if(Math.abs(Robotx-targetTranslation2d.getX())>.01&&Math.abs(Roboty-targetTranslation2d.getY())>.01){
-      swerve.Aim(new Translation2d(xError, -yError), rotation);
-    }
-    else{
-      pathStarted = false;
-      new AutoScore().schedule(); 
-    }
-}
+      if(DriverStation.getAlliance() == Alliance.Blue){
+
+      
+      toGrid = PathGenerator.generatePath(new PathConstraints(4, 4), new Node(new Translation2d(2.07,2.85),new Rotation2d(-180)),Constants.FieldConstants.obstacles);
+
+    }else{
+      toGrid = PathGenerator.generatePath(new PathConstraints(4, 4), new Node(new Translation2d(14.41,2.85),new Rotation2d(0)),Constants.FieldConstants.obstacles);
+
+    }      
+    Logger.getInstance().recordOutput("toGrid", toGrid);
+    // scuffedPathPlanner.setTrajectory(toGrid);
+    // pathStarted = true;
+    // Translation2d targetTranslation2d = scuffedPathPlanner.getDesiredPose2d(false, 1, swerve.getPose()).getTranslation();
+    // double currentTime  = Timer.getFPGATimestamp();
+    // double dt = currentTime-lastTimeStamp;
+    // xError = xPID.calculate(Robotx-targetTranslation2d.getX(), dt);
+    // yError = yPID.calculate(Roboty-targetTranslation2d.getY(), dt);
+
+  }
   
         
   

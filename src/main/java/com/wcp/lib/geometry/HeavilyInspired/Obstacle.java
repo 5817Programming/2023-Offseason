@@ -3,8 +3,9 @@ package com.wcp.lib.geometry.HeavilyInspired;
 import java.util.ArrayList;
 import java.util.List;
 
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
+import com.wcp.lib.geometry.Rotation2d;
+import com.wcp.lib.geometry.Translation2d;
+
 
 public class Obstacle {
     public PolygonDouble polygon;
@@ -118,13 +119,13 @@ public class Obstacle {
             // Calculate angle of edge
             Rotation2d angle = point2.minus(point1).getAngle();
             // Calculate perpendicular angle
-            Rotation2d transformAngle = angle.plus(Rotation2d.fromDegrees(90));
+            Rotation2d transformAngle = angle.rotateBy(Rotation2d.fromDegrees(90));
             // Create offset vector using distance and angles
             Translation2d offset = new Translation2d(distance, 0).rotateBy(transformAngle);
             // Add offset to points
             return new ObstacleEdge(
-                    point1.plus(offset),
-                    point2.plus(offset)
+                    point1.translateBy(offset),
+                    point2.translateBy(offset)
             );
         }
 

@@ -5,6 +5,7 @@
 package com.wcp.lib.geometry;
 
 import static com.wcp.lib.util.Util.kEpsilon;
+
 /** Add your docs here. */
 public class Rotation2d extends edu.wpi.first.math.geometry.Rotation2d{
     protected double m_cos;
@@ -71,6 +72,9 @@ public class Rotation2d extends edu.wpi.first.math.geometry.Rotation2d{
     
     public Rotation2d rotateBy(final Rotation2d other) {
         return new Rotation2d(m_cos * other.m_cos - m_sin * other.m_sin, m_cos * other.m_sin + m_sin * other.m_cos, true);
+    }
+    public edu.wpi.first.math.geometry.Rotation2d toWPI(){
+        return new edu.wpi.first.math.geometry.Rotation2d(m_cos,m_sin);
     }
     
     public double distance(Rotation2d other) {

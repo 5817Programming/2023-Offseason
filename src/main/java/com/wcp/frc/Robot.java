@@ -11,18 +11,17 @@ import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.NT4Publisher;
 
 import com.pathplanner.lib.PathConstraints;
-import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
-import com.pathplanner.lib.PathPoint;
+import com.wcp.frc.subsystems.Aim;
 import com.wcp.frc.subsystems.SubsystemManager;
 import com.wcp.frc.subsystems.Swerve;
 import com.wcp.frc.subsystems.Vision;
 import com.wcp.lib.geometry.Rotation2d;
 import com.wcp.lib.geometry.Translation2d;
+import com.wcp.lib.geometry.HeavilyInspired.Node;
 import com.wcp.lib.util.PathGenerator;
 
 import edu.wpi.first.wpilibj.PowerDistribution;
-import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -124,7 +123,8 @@ public class Robot extends LoggedRobot {
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
-
+    PathPlannerTrajectory toGrid = PathGenerator.generatePath(new PathConstraints(4, 4), new Node(new Translation2d(2.07,2.85),new Rotation2d(-180)),Constants.FieldConstants.obstacles);
+    Logger.getInstance().recordOutput("toGrid", toGrid);
   }
 
   /** This function is called once when the robot is disabled. */
