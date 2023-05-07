@@ -24,7 +24,7 @@ import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-=======
+
 
 import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.NT4Publisher;
@@ -40,7 +40,6 @@ import com.wcp.frc.subsystems.Scores;
 import com.wcp.frc.subsystems.Elevator;
 
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
@@ -54,7 +53,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 public class Robot extends LoggedRobot {
 
 
-public class Robot extends LoggedRobot {
+
   private static final String kDefaultAuto = "Default";
   private static final String kCustomAuto = "My Auto";
   private String m_autoSelected;
@@ -88,7 +87,6 @@ public class Robot extends LoggedRobot {
     Logger.getInstance().start(); 
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
     m_chooser.addOption("My Auto", kCustomAuto);
-    SmartDashboard.putData("Auto choices", m_chooser);
 
     controls = Controls.getInstance();
     swerve = Swerve.getInstance();
@@ -200,7 +198,7 @@ public class Robot extends LoggedRobot {
    
      System.out.println("run");
     
-=======
+
     // scores.zero();
     swerve = Swerve.getInstance();
     swerve.fieldzeroSwerve();

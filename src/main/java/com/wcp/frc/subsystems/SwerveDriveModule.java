@@ -212,7 +212,7 @@ public Pose2d getEstimatedRobotPose(){
 
 		double xScrubFactor = Constants.kXScrubFactor;
 		double yScrubFactor = Constants.kYScrubFactor;
-        if(Util.epsilonEquals(Math.signum(deltaPosition.x()), 1.0)){
+        if(Util.epsilonEquals(Math.signum(deltaPosition.getX()), 1.0)){
             if(standardCarpetDirection){
                 xScrubFactor = 1.0;
             }else{
@@ -225,7 +225,7 @@ public Pose2d getEstimatedRobotPose(){
                 xScrubFactor = 1.0;
             }
         }
-        if(Util.epsilonEquals(Math.signum(deltaPosition.y()), 1.0)){
+        if(Util.epsilonEquals(Math.signum(deltaPosition.getY()), 1.0)){
             if(standardCarpetDirection){
                 yScrubFactor = 1.0;
             }else{
@@ -240,10 +240,8 @@ public Pose2d getEstimatedRobotPose(){
         }
 
 
-		deltaPosition = new Translation2d(deltaPosition.x() * xScrubFactor,
-			deltaPosition.y() * yScrubFactor);
-        Logger.getInstance().recordOutput("delta x " + moduleID, deltaPosition.x());
-        Logger.getInstance().recordOutput("delta t" + moduleID, deltaPosition.y());
+		deltaPosition = new Translation2d(deltaPosition.getX() * xScrubFactor,
+			deltaPosition.getY() * yScrubFactor);
 		Translation2d updatedPosition = position.translateBy(deltaPosition);
 		Pose2d staticWheelPose = new Pose2d(updatedPosition, robotHeading);
 		Pose2d robotPose = staticWheelPose.transformBy(Pose2d.fromTranslation(mstartingPosition).inverse());

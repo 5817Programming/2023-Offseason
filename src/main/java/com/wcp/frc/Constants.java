@@ -33,9 +33,6 @@ public class Constants {
     public static final double mRobotHypot = Math.hypot(mRobotBaseWidth,mRobotBaseLength)*2;
 
     public static final double kOuterWheelDriveDiameter = 4.0;
-    public static final double mRobotBaseWidth = Units.inchesToMeters(29); //The Robot Wheel Base Width
-    public static final double mRobotBaseLength = Units.inchesToMeters(29);//The Robot Wheel Base Length
-
 
     ///-------Swerve Values-------///
     //The positions of the modules, relative to the robot's center
