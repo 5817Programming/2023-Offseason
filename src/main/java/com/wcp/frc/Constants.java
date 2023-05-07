@@ -531,7 +531,7 @@ public class Constants {
                     allianceFlip(FieldConstants.Community.wallCorners[3]).getY(),
                     allianceFlip(FieldConstants.Community.wallCorners[1]).getY(),
                     allianceFlip(FieldConstants.Community.wallCorners[0]).getY()
-                }).offset(0.5)
+                }).offset(0.6)
                 );
     
         /**
