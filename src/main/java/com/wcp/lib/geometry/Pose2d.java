@@ -46,8 +46,8 @@ public class Pose2d extends edu.wpi.first.math.geometry.Pose2d {
      * @return The opposite of this transform.
      */
     public Pose2d inverse() {
-        Rotation2d rotation_inverted = mRotation.inverse();
-        return new Pose2d(mTranslation.inverse().rotateBy(rotation_inverted), rotation_inverted);
+        Rotation2d rotation_inverted = m_rotation.inverse();
+        return new Pose2d(m_translation.inverse().rotateBy(rotation_inverted), rotation_inverted);
 
     }
     @Override
@@ -76,8 +76,8 @@ public class Pose2d extends edu.wpi.first.math.geometry.Pose2d {
      * @return This transform * other
      */
     public Pose2d transformBy(final Pose2d other) {
-        return new Pose2d(mTranslation.translateBy(other.mTranslation.rotateBy(mRotation)),
-                mRotation.rotateBy(other.mRotation));
+        return new Pose2d(m_translation.translateBy(other.m_translation.rotateBy(m_rotation)),
+                m_rotation.rotateBy(other.m_rotation));
     }
 
 }

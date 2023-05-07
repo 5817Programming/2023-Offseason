@@ -261,8 +261,8 @@ modules = Arrays.asList(frontRightModule, frontLeftModule, rearLeftModule, rearR
 		//SmartDashboard.putNumber("Modules Used", modulesToUse.size());
 		
 		for(SwerveDriveModule m : modulesToUse){
-			x += m.getEstimatedRobotPose().getTranslation().x();
-			y += m.getEstimatedRobotPose().getTranslation().y();
+			x += m.getEstimatedRobotPose().getTranslation().getX();
+			y += m.getEstimatedRobotPose().getTranslation().getY();
 		}
 		Pose2d updatedPose = new Pose2d(new Translation2d(x / modulesToUse.size(), y / modulesToUse.size()), heading);
 		double deltaPos = updatedPose.getTranslation().translateBy(pose.getTranslation().inverse()).norm();
@@ -294,7 +294,7 @@ modules = Arrays.asList(frontRightModule, frontLeftModule, rearLeftModule, rearR
 
     @Override
     public void outputTelemetry() {
-        edu.wpi.first.math.geometry.Pose2d pose2d = new edu.wpi.first.math.geometry.Pose2d(pose.getTranslation().x(),pose.getTranslation().y(),Rotation2d.fromDegrees(pigeon.getAngle()));
+        edu.wpi.first.math.geometry.Pose2d pose2d = new edu.wpi.first.math.geometry.Pose2d(pose.getTranslation().getX(),pose.getTranslation().getY(),Rotation2d.fromDegrees(pigeon.getAngle()));
         modules.forEach((m) -> {m.outputTelemetry();});
         SmartDashboard.putNumber("Robot Heading", getRobotHeading().getDegrees());
         Logger.getInstance().recordOutput("Odometry",pose2d);

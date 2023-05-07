@@ -50,10 +50,7 @@ public class Translation2d extends edu.wpi.first.math.geometry.Translation2d{
         return m_y;
     }
     
-    public double x() {
-        return mX;
-
-    }
+  
     public Rotation2d angleToOther(Translation2d other){
         double deltax = m_x - other.m_x;
         double deltay = m_y = other.m_y;
