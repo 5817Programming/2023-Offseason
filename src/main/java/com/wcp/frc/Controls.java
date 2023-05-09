@@ -205,7 +205,6 @@ public class Controls {
             aim.aimAtScore(cube, driverLeftBumperTAP, driverRightBumperTAP);
         }else {
             swerve.sendInput(driverLeftYInput, driverLeftXInput, driverRightXInput);
-            swerve.setState(State.MANUAL);
         }
       
        // vision.getHeight(driverLeftTrigger, driverightTrigger);

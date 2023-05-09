@@ -50,7 +50,7 @@ public class Swerve extends Subsystem {
 
     public double aimScalar = 0;
     public double snapAngle = 0;
-    public double targetHeading;
+    public Rotation2d targetHeading;
     public double rotationScalar;
     double distanceTraveled;
 	double currentVelocity = 0;
@@ -161,14 +161,15 @@ modules = Arrays.asList(frontRightModule, frontLeftModule, rearLeftModule, rearR
             }
         }
     }
-    public void Aim(Translation2d aimingVector,double rotation){
+    public void Aim(Translation2d aimingVector,Rotation2d rotation){
         currentState = State.AIM;
         this.aimingVector = aimingVector;
         targetHeading = rotation;
     }
-    public void Aim(Translation2d aimingVector){
+    public void Aim(Translation2d aimingVector, double scalar){
         currentState = State.AIM;
         this.aimingVector = aimingVector;
+        this.rotationScalar = scalar;
     }
 
 
@@ -198,32 +199,31 @@ modules = Arrays.asList(frontRightModule, frontLeftModule, rearLeftModule, rearR
     
     public void update(double timestamp) {
         drivingpose = Pose2d.fromRotaiton(getRobotHeading());
-        // if(currentState == State.MANUAL ){
-            
+        if(currentState == State.MANUAL ){
             double rotationCorrection =  headingController.updateRotationCorrection(drivingpose.getRotation(), timestamp);
         if(translationVector.norm() == 0 || rotationScalar != 0) {
             rotationCorrection = 0;
         }
         SmartDashboard.putNumber("Swerve Heading Correctiomm    33  33   /n", rotationCorrection);
         commandModules(inverseKinematics.updateDriveVectors(translationVector, rotationScalar + rotationCorrection, drivingpose, robotCentric));
-        // }
-        // if(currentState == State.AIM){
-        //     headingController.setTargetHeading(Rotation2d.fromDegrees(targetHeading));
-        //     double rotationCorrection = headingController.getRotationCorrection(getRobotHeading(), timestamp);
-        //     if(translationVector.norm() == 0 || rotationScalar != 0) {
-        //         rotationCorrection = 0;
-        //     }
-        //     SmartDashboard.putNumber("Swerve Heading Correctiomm    33  33   /n", rotationCorrection);
-        //     commandModules(inverseKinematics.updateDriveVectors(aimingVector, rotationCorrection, drivingpose, robotCentric));
-        // }
-        // if(currentState == State.SNAP){
-        //     headingController.setTargetHeading(Rotation2d.fromDegrees(targetHeading));
-        //     double rotationCorrection =  headingController.getRotationCorrection(drivingpose.getRotation(), timestamp);
+        }
+        if(currentState == State.AIM){
+            headingController.setTargetHeading(targetHeading);
+            double rotationCorrection = headingController.getRotationCorrection(getRobotHeading(), timestamp);
+            if(translationVector.norm() == 0 || rotationScalar != 0) {
+                rotationCorrection = 0;
+            }
+            SmartDashboard.putNumber("Swerve Heading Correctiomm    33  33   /n", rotationCorrection);
+            commandModules(inverseKinematics.updateDriveVectors(aimingVector, rotationCorrection+rotationScalar, drivingpose, robotCentric));
+        }
+        if(currentState == State.SNAP){
+            headingController.setTargetHeading(Rotation2d.fromDegrees(targetHeading));
+            double rotationCorrection =  headingController.getRotationCorrection(drivingpose.getRotation(), timestamp);
         
-        // SmartDashboard.putNumber("Swerve Heading Correctiomm    33  33   /n", rotationCorrection);
-        // commandModules(inverseKinematics.updateDriveVectors(translationVector, rotationCorrection, drivingpose, robotCentric));
+        SmartDashboard.putNumber("Swerve Heading Correctiomm    33  33   /n", rotationCorrection);
+        commandModules(inverseKinematics.updateDriveVectors(translationVector, rotationCorrection, drivingpose, robotCentric));
         
-        // }
+        }
     }
     /** The tried and true algorithm for keeping track of position */
 	public synchronized void updatePose(double timestamp){

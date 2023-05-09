@@ -42,6 +42,7 @@ public class Aim extends SubsystemBase {
   double Robotx;
   Vision vision = Vision.getInstance();
   Scores scores = Scores.getInstance();
+  Gyro pigeon = Pigeon.getInstance();
   double xERROR;
   double yERROR;
 
@@ -62,6 +63,7 @@ public class Aim extends SubsystemBase {
     swerve = Swerve.getInstance();
      xPID = new SynchronousPIDF(.5, 0.0, 0);
      yPID = new SynchronousPIDF(.5, 0.0, 0);
+     rPID = new SynchronousPIDF(.5, 0.0, 0);
      
 
      thetaController = new PIDController(0.5, 0, 0);
@@ -121,7 +123,7 @@ public class Aim extends SubsystemBase {
 
     xError = xPID.calculate(Robotx-1.84, dt);
     yError = yPID.calculate(Roboty-Constants.scoresY.get(scoringNode), dt);
-    swerve.Aim(new Translation2d(xError, -yError), rotation);
+    swerve.Aim(new Translation2d(xError, -yError), Rotation2d.fromDegrees(rotation));
     lastTimeStamp = currentTime;
 
   }
@@ -169,9 +171,26 @@ public class Aim extends SubsystemBase {
     xERROR = thetaController.calculate(vision.x(),0);
     yERROR= advanceController.calculate(vision.y(),-5);
     //corrects for error
-    swerve.Aim(new Translation2d(xERROR,yERROR));
+    swerve.Aim(new Translation2d(xERROR,yERROR),0);
     
 
   }
-  
+
+  public void goToObject(boolean cube){
+    Rotation2d heading = Rotation2d.fromDegrees(pigeon.getAngle());
+    if(cube){
+      vision.setPipeline(Constants.VisionConstants.CUBE_PIPELINE);
+    }
+    else{
+      vision.setPipeline(Constatnts.VisionConstants.CONE_PIPELNE);
+    }
+    double xSetPoint = (.1*heading.cos());
+    double ySetPoint = (.1*heading.sin());
+    double xError = xPID.calculate(vision.getDistanceToGround()*heading.cos(),xSetPoint);
+    double yError = yPID.calculate(vision.getDistanceToGround()*heading.sin(),ySetPoint);
+    double thetaControl = rPID.calculate(vision.y(), 0);
+
+    swerve.Aim(new Translation2d(xError,yERROR), thetaControl);
+
+  }
 }
