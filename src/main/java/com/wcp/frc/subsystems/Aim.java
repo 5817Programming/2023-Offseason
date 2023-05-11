@@ -126,6 +126,9 @@ public class Aim extends SubsystemBase {
 
     xError = xPID.calculate(Robotx-1.84, dt);
     yError = yPID.calculate(Roboty-Constants.scoresY.get(scoringNode), dt);
+    Logger.getInstance().recordOutput("xError",xERROR);
+    Logger.getInstance().recordOutput("yError",yERROR);
+
     swerve.Aim(new Translation2d(xError, -yError), Rotation2d.fromDegrees(rotation));
     lastTimeStamp = currentTime;
 
