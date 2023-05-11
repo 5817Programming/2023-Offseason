@@ -30,6 +30,7 @@ public class Pose2d extends edu.wpi.first.math.geometry.Pose2d {
         return new Pose2d(translation, new Rotation2d());
     }
 
+
     public static Pose2d fromRotaiton(final Rotation2d rotation) {
         return new Pose2d(new Translation2d(), rotation);
     }
@@ -50,6 +51,7 @@ public class Pose2d extends edu.wpi.first.math.geometry.Pose2d {
         return new Pose2d(m_translation.inverse().rotateBy(rotation_inverted), rotation_inverted);
 
     }
+    
     @Override
     public Rotation2d getRotation() {
         return this.m_rotation;

@@ -12,6 +12,9 @@ import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import com.wcp.lib.geometry.Pose2d;
+import com.wcp.lib.geometry.Rotation2d;
+import com.wcp.lib.geometry.Translation2d;
+
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Vision extends SubsystemBase {
@@ -56,6 +59,14 @@ int index;
     double area = ta.getDouble(0.0);
     return area;
   }
+  public Pose2d getPose(){
+    double[] poseList = botpose.getDoubleArray(empty);
+    return new Pose2d(new Translation2d(poseList[0],poseList[1]), new Rotation2d());
+
+  }
+  // public Pose2d getWeightedPose(){
+  //   return new Pose2d()
+  // }
   public double getDistance(){//gets distance to target
     double distanceFromLimelightToGoalInches = (0 - Constants.VisionConstants.LIMELIGHT_LENS_HEIGHT_INCHES)/Math.tan(Math.toRadians(Constants.VisionConstants.LIMELIGHT_MOUNT_ANGLE_DEGREES + y()));
   return distanceFromLimelightToGoalInches>0&&distanceFromLimelightToGoalInches<1000?Units.inchesToMeters(distanceFromLimelightToGoalInches):0;

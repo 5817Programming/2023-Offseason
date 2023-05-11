@@ -65,9 +65,9 @@ public class Constants {
 
 
 
-    public static final double kFrontRightParkEncoderPosition = -356; //-354.950352
-    public static final double kFrontLeftParkEncoderPosition = -355.170825; //-263.094811
-    public static final double kRearLeftParkEncoderPosition =  -354.950352; //-121.094031
+    public static final double kFrontRightParkEncoderPosition = -8; //-354.950352
+    public static final double kFrontLeftParkEncoderPosition = -265; //-263.094811
+    public static final double kRearLeftParkEncoderPosition =  -265; //-121.094031
     public static final double kRearRightParkEncoderPosition = -262; //-355.170825    
     
     public static final List<Double> parkPositions = Arrays.asList(kFrontRightParkEncoderPosition,kFrontLeftParkEncoderPosition,kRearLeftParkEncoderPosition,kRearRightParkEncoderPosition);

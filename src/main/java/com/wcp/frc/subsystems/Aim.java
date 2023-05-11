@@ -12,6 +12,7 @@ import com.wcp.lib.util.PathFollower;
 import com.wcp.lib.util.PathGenerator;
 import com.wcp.frc.Constants;
 import com.wcp.frc.subsystems.gyros.Gyro;
+import com.wcp.frc.subsystems.gyros.Pigeon;
 import com.wcp.lib.geometry.Rotation2d;
 import com.wcp.lib.geometry.Translation2d;
 import com.wcp.lib.geometry.HeavilyInspired.Node;
@@ -34,6 +35,8 @@ public class Aim extends SubsystemBase {
   double yError;
   SynchronousPIDF xPID;
   SynchronousPIDF yPID;
+  SynchronousPIDF rPID;
+
   PIDController thetaController;
   PIDController advanceController;
   double lastTimeStamp = 0;
@@ -182,12 +185,12 @@ public class Aim extends SubsystemBase {
       vision.setPipeline(Constants.VisionConstants.CUBE_PIPELINE);
     }
     else{
-      vision.setPipeline(Constatnts.VisionConstants.CONE_PIPELNE);
+      vision.setPipeline(Constants.VisionConstants.CONE_PIPELNE);
     }
     double xSetPoint = (.1*heading.cos());
     double ySetPoint = (.1*heading.sin());
-    double xError = xPID.calculate(vision.getDistanceToGround()*heading.cos(),xSetPoint);
-    double yError = yPID.calculate(vision.getDistanceToGround()*heading.sin(),ySetPoint);
+    double xError = xPID.calculate(vision.getDistanceToGroundObject()*heading.cos(),xSetPoint);
+    double yError = yPID.calculate(vision.getDistanceToGroundObject()*heading.sin(),ySetPoint);
     double thetaControl = rPID.calculate(vision.y(), 0);
 
     swerve.Aim(new Translation2d(xError,yERROR), thetaControl);

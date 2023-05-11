@@ -139,7 +139,7 @@ modules = Arrays.asList(frontRightModule, frontLeftModule, rearLeftModule, rearR
     }
     public void snap(double angle){
         currentState = State.SNAP;
-        targetHeading = angle;
+        targetHeading = Rotation2d.fromDegrees(angle);
     }
     
     public void setState(State state){
@@ -217,7 +217,7 @@ modules = Arrays.asList(frontRightModule, frontLeftModule, rearLeftModule, rearR
             commandModules(inverseKinematics.updateDriveVectors(aimingVector, rotationCorrection+rotationScalar, drivingpose, robotCentric));
         }
         if(currentState == State.SNAP){
-            headingController.setTargetHeading(Rotation2d.fromDegrees(targetHeading));
+            headingController.setTargetHeading((targetHeading));
             double rotationCorrection =  headingController.getRotationCorrection(drivingpose.getRotation(), timestamp);
         
         SmartDashboard.putNumber("Swerve Heading Correctiomm    33  33   /n", rotationCorrection);
