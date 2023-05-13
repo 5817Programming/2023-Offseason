@@ -5,6 +5,7 @@ import com.pathplanner.lib.PathConstraints;
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
 import com.pathplanner.lib.PathPoint;
+import com.wcp.frc.Constants.FieldConstants;
 import com.wcp.frc.subsystems.Swerve;
 import com.wcp.lib.geometry.Pose2d;
 import com.wcp.lib.geometry.Rotation2d;
@@ -23,52 +24,46 @@ import java.util.List;
 public class PathGenerator {
     public static boolean  ran = false;
     public static PathPlannerTrajectory generatePath(PathConstraints constraints,Node endTarget, List<Obstacle> obstacles){
-        List<Node> fullPath = new ArrayList<Node>();
 
+        List<Node> fullPath = new ArrayList<Node>();
         Node start = new Node(Swerve.getInstance());
         VisGraph aStar = VisGraph.getInstance();
         List<PathPoint> fullPathPoints = new ArrayList<PathPoint>();
-
+        List<Obstacle> totalObstacles = new ArrayList<>();
+        double x = Swerve.getInstance().getPose().getTranslation().getX()+1;
+        Logger.getInstance().recordOutput("xob", x);
+  
+for(int i = 0; i < obstacles.size(); i ++){
+                totalObstacles.add(obstacles.get(i));
+            }
 
     aStar.addNode(endTarget);
 
         if(!ran){
-        aStar.addNode(new Node(2.92-.6,1.51-.6));
-        aStar.addNode(new Node(2.92-0.6,3.98+0.6));
-        aStar.addNode(new Node(4.86+0.6,3.98+0.6));
-        aStar.addNode(new Node(4.86+0.6,1.51-.6));
-
-        aStar.addNode(new Node(11.68-0.6,1.51-0.6));
-        aStar.addNode(new Node(11.68-0.6,4.4));
-        aStar.addNode(new Node(14.2,4.4));
-        aStar.addNode(new Node(14.2,1.51-0.6));
-
-        aStar.addNode(new Node(1.22-0.5, 5.34-0.5));
-        aStar.addNode(new Node(1.22-0.5, 5.7+0.5));
-        aStar.addNode(new Node(3.26+0.8, 5.34+0.5));
-        aStar.addNode(new Node(3.26+0.8, 5.7-0.5));
-
-        aStar.addNode(new Node(13, 5.34-0.6));
-        aStar.addNode(new Node(13, 5.70+0.6));
-        aStar.addNode(new Node(17, 5.34+0.6));
-        aStar.addNode(new Node(17, 5.7-0.6));}
+        for(double i = 6; i < 45; i++){
+            for( double j = 0; j < 27; j++){
+                aStar.addNode(new Node(i/3,j/3));
+            }
+        }
+        }
 
     for(int i = 0; i<aStar.getNodeSize();i++){
       Node startNode = aStar.getNode(i);
       //System.out.println(""+startNode.getX()+","+startNode.getY());
-      for(int j = 0; j<aStar.getNodeSize(); j++){
-        aStar.addEdge(new Edge(startNode, aStar.getNode(j)), obstacles);
+      for(int j = i; j<aStar.getNodeSize(); j++){
+        aStar.addEdge(new Edge(startNode, aStar.getNode(j)), totalObstacles);
       }
     }
+    
 
-        if(aStar.addEdge(new Edge(start, endTarget), obstacles)){
+        if(aStar.addEdge(new Edge(start, endTarget), totalObstacles)){
             fullPath.add(0,start);
             fullPath.add(1,endTarget);
 
         }else{
             for(int i = 0; i<aStar.getNodeSize();i++){
                 Node end = aStar.getNode(i);
-                aStar.addEdge(new Edge(start,end), obstacles);
+                aStar.addEdge(new Edge(start,end), totalObstacles);
             }
             fullPath = aStar.findPath(start, endTarget);
         }
@@ -94,7 +89,7 @@ public class PathGenerator {
         }
         ran = true;
         for(int i = 0; i < fullPath.size(); i++){
-            Logger.getInstance().recordOutput("point"+i,Pose2d.fromTranslation(fullPath.get(i).getTranslation()).toWPI());
+            //Logger.getInstance().recordOutput("point"+i,Pose2d.fromTranslation(fullPath.get(i).getTranslation()).toWPI());
         }
         return PathPlanner.generatePath(constraints,fullPathPoints);
         }else{

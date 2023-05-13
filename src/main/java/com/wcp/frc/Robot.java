@@ -216,7 +216,7 @@ public class Robot extends LoggedRobot {
     controls.update();
 
     double currentTime = Timer.getFPGATimestamp();
-    if(currentTime - lastTime > .3){
+    if(currentTime - lastTime > 1){
     PathPlannerTrajectory toGrid = PathGenerator.generatePath(new PathConstraints(4, 4), new Node(new Translation2d(14.3,2.85),new Rotation2d(-180)),Constants.FieldConstants.obstacles);
     Logger.getInstance().recordOutput("toGrid", toGrid);
     lastTime = currentTime;

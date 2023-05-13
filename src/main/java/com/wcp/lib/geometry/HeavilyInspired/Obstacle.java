@@ -20,6 +20,7 @@ public class Obstacle {
         }
     }
 
+
     /**
      * Creates a polygon that's offset by the distance passed in.
      *

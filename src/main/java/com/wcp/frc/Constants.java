@@ -520,7 +520,7 @@ public class Constants {
                     FieldConstants.Community.wallCorners[1].getY(),
                     FieldConstants.Community.wallCorners[3].getY(),
                     FieldConstants.Community.wallCorners[2].getY()
-                }).offset(0.5),
+                }).offset(0.6 ),
                 new Obstacle(new double[] {
                     allianceFlip(FieldConstants.Community.wallCorners[2]).getX(),
                     allianceFlip(FieldConstants.Community.wallCorners[3]).getX(),
@@ -533,6 +533,8 @@ public class Constants {
                     allianceFlip(FieldConstants.Community.wallCorners[0]).getY()
                 }).offset(0.6)
                 );
+
+                
     
         /**
          * Flips a translation to the correct side of the field based on the current
@@ -542,11 +544,13 @@ public class Constants {
          * rightmost point on the BLUE ALLIANCE wall.
          */
         public static Translation2d allianceFlip(Translation2d translation) {
+            
             if (DriverStation.getAlliance() == Alliance.Red) {
                 return new Translation2d(fieldLength - translation.getX(), translation.getY());
             } else {
                 return translation;
             }
+            
         }
     
         /**
