@@ -16,7 +16,9 @@ import com.wcp.frc.Constants;
 import com.wcp.frc.Ports;
 
 
-public class SideElevator extends SubsystemBase {
+public class SideElevator extends Subsystem {
+	PeriodicIO mPeriodicIO = new PeriodicIO();
+
 	/* Setpoints */
 	double mTargetMin = 1000;//500
 	double mTargetMax = 260000;//78000
@@ -70,25 +72,51 @@ public class SideElevator extends SubsystemBase {
 }
   
 
-  @Override
-  public void periodic() {
-    // This method will be called once per scheduler run
-	
-  }
 
   public void elevator( double targetPos){
-    side.set(ControlMode.MotionMagic, targetPos);
-
+	mPeriodicIO.driveControlMode = ControlMode.MotionMagic;
+	mPeriodicIO.driveDemand = targetPos;
   }
 
   public void my_PercentOutput( double speed){
-   side.set(ControlMode.PercentOutput, speed);
-  }
+	mPeriodicIO.driveControlMode = ControlMode.PercentOutput;
+	mPeriodicIO.driveDemand = speed;  }
 
   public double getEncoder(){
 	Logger.getInstance().recordOutput("side elevator", side.getSelectedSensorPosition());
 	return side.getSelectedSensorPosition();
   }
+
+
+@Override
+public void outputTelemetry() {
+	// TODO Auto-generated method stub
+	
+}
+
+
+@Override
+public void stop() {
+	// TODO Auto-generated method stub
+	
+}
+@Override
+public void writePeriodicOutputs() {
+	mPeriodicIO.drivePosition = side.getSelectedSensorPosition();
+	mPeriodicIO.velocity = side.getSelectedSensorVelocity();
+}
+@Override
+public void readPeriodicInputs() {
+	side.set(mPeriodicIO.driveControlMode, mPeriodicIO.driveDemand);
+}
+public static class PeriodicIO  {
+	double drivePosition = 0;
+	double velocity = 0;
+
+	ControlMode driveControlMode = ControlMode.MotionMagic;
+	double rotationDemand = 0.0;
+	double driveDemand = 0.0;
+}
   
 
 

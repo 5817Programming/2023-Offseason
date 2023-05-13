@@ -14,7 +14,9 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.wcp.frc.Constants;
 import com.wcp.frc.Ports;
 
-public class Arm extends SubsystemBase {
+public class Arm extends Subsystem {
+	PeriodicIO mPeriodicIO = new PeriodicIO();
+
 	/* Setpoints */
 	double mTargetMin = -32000;// 500
 	double mTargetMax = -500;// 78000
@@ -104,28 +106,54 @@ public class Arm extends SubsystemBase {
 		arm.setSelectedSensorPosition(0, Constants.kPIDLoopIdx, Constants.TIMEOUT_MILLISECONDS);
 	}
 
-	@Override
-	public void periodic() {
-		// This method will be called once per scheduler run
-	}
+
 
 	public void setMotionMagic(double targetPos) {
-		arm.set(ControlMode.MotionMagic, targetPos);
+		mPeriodicIO.driveControlMode = ControlMode.MotionMagic;
+		mPeriodicIO.driveDemand = targetPos;
+
 	}
 
 	public void setPercentOutput(double speed) {
-		arm.set(ControlMode.PercentOutput, speed);
-	}
-
-	public double getEncoder() {
-		Logger.getInstance().recordOutput("arm", arm.getSelectedSensorPosition());
-
-		return arm.getSelectedSensorPosition();
-		
+		mPeriodicIO.driveControlMode = ControlMode.PercentOutput;
+		mPeriodicIO.driveDemand = speed;
 	}
 
 	public void configVelocity(double velocity) {
 		arm.configMotionCruiseVelocity(velocity, Constants.TIMEOUT_MILLISECONDS);
 
 	}
+	public double getEncoder(){
+		Logger.getInstance().recordOutput("side elevator", mPeriodicIO.drivePosition);
+		return mPeriodicIO.drivePosition;
+	  }
+	@Override
+    public void writePeriodicOutputs() {
+        mPeriodicIO.drivePosition = arm.getSelectedSensorPosition();
+        mPeriodicIO.velocity = arm.getSelectedSensorVelocity();
+    }
+    @Override
+    public void readPeriodicInputs() {
+        arm.set(mPeriodicIO.driveControlMode, mPeriodicIO.driveDemand);
+    }
+	public static class PeriodicIO  {
+        double drivePosition = 0;
+        double velocity = 0;
+
+        ControlMode driveControlMode = ControlMode.MotionMagic;
+        double rotationDemand = 0.0;
+        double driveDemand = 0.0;
+    }
+	@Override
+	public void outputTelemetry() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void stop() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }
