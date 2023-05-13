@@ -496,7 +496,7 @@ public class Constants {
                         FieldConstants.Community.chargingStationCorners[1].getY(),
                         FieldConstants.Community.chargingStationCorners[3].getY(),
                         FieldConstants.Community.chargingStationCorners[2].getY()
-                }).offset(0.47)
+                }).offset(0.5)
                 ,
                 // Red Charging Station
                 new Obstacle(new double[] {
@@ -509,7 +509,7 @@ public class Constants {
                         allianceFlip(FieldConstants.Community.chargingStationCorners[3]).getY(),
                         allianceFlip(FieldConstants.Community.chargingStationCorners[1]).getY(),
                         allianceFlip(FieldConstants.Community.chargingStationCorners[0]).getY()
-                }).offset(0.3),
+                }).offset(0.5),
                 new Obstacle(new double[] {
                     FieldConstants.Community.wallCorners[0].getX(),
                     FieldConstants.Community.wallCorners[1].getX(),
@@ -520,7 +520,7 @@ public class Constants {
                     FieldConstants.Community.wallCorners[1].getY(),
                     FieldConstants.Community.wallCorners[3].getY(),
                     FieldConstants.Community.wallCorners[2].getY()
-                }).offset(0.6 ),
+                }).offset(0.7 ),
                 new Obstacle(new double[] {
                     allianceFlip(FieldConstants.Community.wallCorners[2]).getX(),
                     allianceFlip(FieldConstants.Community.wallCorners[3]).getX(),
@@ -531,7 +531,7 @@ public class Constants {
                     allianceFlip(FieldConstants.Community.wallCorners[3]).getY(),
                     allianceFlip(FieldConstants.Community.wallCorners[1]).getY(),
                     allianceFlip(FieldConstants.Community.wallCorners[0]).getY()
-                }).offset(0.6)
+                }).offset(0.7)
                 );
 
                 

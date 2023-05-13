@@ -14,6 +14,9 @@ import com.wcp.lib.geometry.HeavilyInspired.Edge;
 import com.wcp.lib.geometry.HeavilyInspired.Node;
 import com.wcp.lib.geometry.HeavilyInspired.Obstacle;
 import com.wcp.lib.geometry.HeavilyInspired.VisGraph;
+
+import edu.wpi.first.wpilibj.Timer;
+
 import org.littletonrobotics.junction.Logger;
 
 
@@ -24,6 +27,7 @@ import java.util.List;
 public class PathGenerator {
     public static boolean  ran = false;
     public static PathPlannerTrajectory generatePath(PathConstraints constraints,Node endTarget, List<Obstacle> obstacles){
+        double grain = 3.5;
 
         List<Node> fullPath = new ArrayList<Node>();
         Node start = new Node(Swerve.getInstance());
@@ -40,9 +44,9 @@ for(int i = 0; i < obstacles.size(); i ++){
     aStar.addNode(endTarget);
 
         if(!ran){
-        for(double i = 6; i < 45; i++){
-            for( double j = 0; j < 27; j++){
-                aStar.addNode(new Node(i/3,j/3));
+        for(double i = 2*grain; i < 15*grain; i++){
+            for( double j = 0; j < 9*grain; j++){
+                aStar.addNode(new Node(i/grain,j/grain));
             }
         }
         }
@@ -80,7 +84,11 @@ for(int i = 0; i < obstacles.size(); i ++){
                 edu.wpi.first.math.geometry.Rotation2d heading = new Rotation2d(fullPath.get(i).getX() - fullPath.get(i - 1).getX(), endTarget.getY() - fullPath.get(i - 1).getY()).toWPI();
                 fullPathPoints.add(i,new PathPoint(translation, heading, endTarget.getHolRot()));
             }
-            else{
+            else if(i < fullPath.size() - 3){
+                edu.wpi.first.math.geometry.Translation2d translation = new Translation2d(fullPath.get(i).getTranslation().getX(),fullPath.get(i).getTranslation().getY()).toWPI();
+                edu.wpi.first.math.geometry.Rotation2d heading = fullPath.get(i+1).getTranslation().translateBy(fullPath.get(i).getTranslation().inverse()).getAngle().toWPI();
+                fullPathPoints.add(i,new PathPoint(translation, heading, endTarget.getHolRot(),5).withControlLengths(.5,.2));
+            }else{
                 edu.wpi.first.math.geometry.Translation2d translation = new Translation2d(fullPath.get(i).getTranslation().getX(),fullPath.get(i).getTranslation().getY()).toWPI();
                 edu.wpi.first.math.geometry.Rotation2d heading = fullPath.get(i+1).getTranslation().translateBy(fullPath.get(i).getTranslation().inverse()).getAngle().toWPI();
                 fullPathPoints.add(i,new PathPoint(translation, heading, endTarget.getHolRot()).withControlLengths(.3,.3));
@@ -91,6 +99,7 @@ for(int i = 0; i < obstacles.size(); i ++){
         for(int i = 0; i < fullPath.size(); i++){
             //Logger.getInstance().recordOutput("point"+i,Pose2d.fromTranslation(fullPath.get(i).getTranslation()).toWPI());
         }
+        Logger.getInstance().recordOutput("desiredPose",PathPlanner.generatePath(constraints,fullPathPoints).sample(Timer.getFPGATimestamp()%PathPlanner.generatePath(constraints,fullPathPoints).getTotalTimeSeconds()).poseMeters);
         return PathPlanner.generatePath(constraints,fullPathPoints);
         }else{
             return new PathPlannerTrajectory();

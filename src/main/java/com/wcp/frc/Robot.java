@@ -190,10 +190,13 @@ public class Robot extends LoggedRobot {
     // // }
     // swerve.followTrajectory();
   }
+  PathPlannerTrajectory toGrid;
+
 
   /** This function is called once when teleop is enabled. */
   @Override
   public void teleopInit() {
+    toGrid = PathGenerator.generatePath(new PathConstraints(4, 4), new Node(new Translation2d(14.3,0),new Rotation2d(-180)),Constants.FieldConstants.obstacles);
 
    
      System.out.println("run");
@@ -216,11 +219,15 @@ public class Robot extends LoggedRobot {
     controls.update();
 
     double currentTime = Timer.getFPGATimestamp();
-    if(currentTime - lastTime > 1){
-    PathPlannerTrajectory toGrid = PathGenerator.generatePath(new PathConstraints(4, 4), new Node(new Translation2d(14.3,2.85),new Rotation2d(-180)),Constants.FieldConstants.obstacles);
+
+    if(currentTime - lastTime > .2){
+     toGrid = PathGenerator.generatePath(new PathConstraints(4, 4), new Node(new Translation2d(14.3,0),new Rotation2d(-180)),Constants.FieldConstants.obstacles);
     Logger.getInstance().recordOutput("toGrid", toGrid);
     lastTime = currentTime;
     }
+
+
+    
 
     //swerve.update(Timer.getFPGATimestamp());
 
