@@ -295,8 +295,8 @@ public class Constants {
                     new Translation2d(chargingStationOuterX, chargingStationLeftY)
             };
             public static final Translation2d[] wallCorners = new Translation2d[] {
-                new Translation2d(3.5, 5.34),
-                new Translation2d(3.5, 5.70),
+                new Translation2d(3.8, 5.34),
+                new Translation2d(3.8, 5.70),
                 new Translation2d(-100, 5.34),
                 new Translation2d(-100, 5.70)
         }; 
@@ -496,7 +496,7 @@ public class Constants {
                         FieldConstants.Community.chargingStationCorners[1].getY(),
                         FieldConstants.Community.chargingStationCorners[3].getY(),
                         FieldConstants.Community.chargingStationCorners[2].getY()
-                }).offset(0.5)
+                }).offset(0.7)
                 ,
                 // Red Charging Station
                 new Obstacle(new double[] {
@@ -509,7 +509,7 @@ public class Constants {
                         allianceFlip(FieldConstants.Community.chargingStationCorners[3]).getY(),
                         allianceFlip(FieldConstants.Community.chargingStationCorners[1]).getY(),
                         allianceFlip(FieldConstants.Community.chargingStationCorners[0]).getY()
-                }).offset(0.5),
+                }).offset(0.7),
                 new Obstacle(new double[] {
                     FieldConstants.Community.wallCorners[0].getX(),
                     FieldConstants.Community.wallCorners[1].getX(),
@@ -520,7 +520,7 @@ public class Constants {
                     FieldConstants.Community.wallCorners[1].getY(),
                     FieldConstants.Community.wallCorners[3].getY(),
                     FieldConstants.Community.wallCorners[2].getY()
-                }).offset(0.7 ),
+                }).offset(0.8 ),
                 new Obstacle(new double[] {
                     allianceFlip(FieldConstants.Community.wallCorners[2]).getX(),
                     allianceFlip(FieldConstants.Community.wallCorners[3]).getX(),
@@ -531,7 +531,7 @@ public class Constants {
                     allianceFlip(FieldConstants.Community.wallCorners[3]).getY(),
                     allianceFlip(FieldConstants.Community.wallCorners[1]).getY(),
                     allianceFlip(FieldConstants.Community.wallCorners[0]).getY()
-                }).offset(0.7)
+                }).offset(0.8)
                 );
 
                 

@@ -67,7 +67,9 @@ for(int i = 0; i < obstacles.size(); i ++){
         }else{
             for(int i = 0; i<aStar.getNodeSize();i++){
                 Node end = aStar.getNode(i);
-                aStar.addEdge(new Edge(start,end), totalObstacles);
+                if(aStar.checkEdge(new Edge(start,end), totalObstacles)){
+                    aStar.addEdge(new Edge(start,end));
+                }
             }
             fullPath = aStar.findPath(start, endTarget);
         }
@@ -87,11 +89,11 @@ for(int i = 0; i < obstacles.size(); i ++){
             else if(i < fullPath.size() - 3){
                 edu.wpi.first.math.geometry.Translation2d translation = new Translation2d(fullPath.get(i).getTranslation().getX(),fullPath.get(i).getTranslation().getY()).toWPI();
                 edu.wpi.first.math.geometry.Rotation2d heading = fullPath.get(i+1).getTranslation().translateBy(fullPath.get(i).getTranslation().inverse()).getAngle().toWPI();
-                fullPathPoints.add(i,new PathPoint(translation, heading, endTarget.getHolRot(),5).withControlLengths(.5,.2));
+                fullPathPoints.add(i,new PathPoint(translation, heading, endTarget.getHolRot(),5).withControlLengths(.1,.1));
             }else{
                 edu.wpi.first.math.geometry.Translation2d translation = new Translation2d(fullPath.get(i).getTranslation().getX(),fullPath.get(i).getTranslation().getY()).toWPI();
                 edu.wpi.first.math.geometry.Rotation2d heading = fullPath.get(i+1).getTranslation().translateBy(fullPath.get(i).getTranslation().inverse()).getAngle().toWPI();
-                fullPathPoints.add(i,new PathPoint(translation, heading, endTarget.getHolRot()).withControlLengths(.3,.3));
+                fullPathPoints.add(i,new PathPoint(translation, heading, endTarget.getHolRot()).withControlLengths(.1,.1));
             }
             
         }

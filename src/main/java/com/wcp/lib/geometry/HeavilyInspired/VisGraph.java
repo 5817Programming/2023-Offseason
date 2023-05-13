@@ -63,6 +63,31 @@ public class VisGraph {
         edge.end.addNeighbor(edge.start);
         return true;
     }
+    public void addEdge(Edge edge) {
+        // Why not use the Line2D class' static method of .linesIntersect() ? I am just hold on
+        this.edges.add(edge);
+        edge.start.addNeighbor(edge.end);
+        edge.end.addNeighbor(edge.start);
+    }
+    public boolean checkEdge(Edge edge, List<Obstacle> obstacles) {
+        // Why not use the Line2D class' static method of .linesIntersect() ? I am just hold on
+        for (Obstacle obstacle : obstacles) {
+            PolygonDouble polygon = obstacle.polygon;
+            for (int i = 0; i < polygon.npoints; i++) {
+                int j = (i + 1) % polygon.npoints;
+                // Couldn't the mod be eliminated by starting the index i at 1 and manually checking the segment between the last vertex and first one before this? Well
+                double x1 = polygon.xpoints[i];
+                double y1 = polygon.ypoints[i];
+                double x2 = polygon.xpoints[j];
+                double y2 = polygon.ypoints[j];
+                if (Line2D.linesIntersect(x1, y1, x2, y2, edge.start.x, edge.start.y, edge.end.x, edge.end.y)) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
 
 
     // Find a path through the navigation mesh from the start node to the goal node
