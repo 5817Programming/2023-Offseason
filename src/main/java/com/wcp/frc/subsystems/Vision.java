@@ -5,6 +5,8 @@
 package com.wcp.frc.subsystems;
 
 import com.wcp.frc.Constants;
+import com.wcp.frc.Ports;
+import com.wcp.frc.subsystems.Sensors.Lidar;
 
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.NetworkTable;
@@ -18,6 +20,7 @@ import com.wcp.lib.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Vision extends SubsystemBase {
+  Lidar lidar = new Lidar(Ports.lidars);
   double[] empty = {0.0,0.0,0.0,0.0,0.0,0.0};
   NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
 NetworkTableEntry tx = table.getEntry("tx");
@@ -47,6 +50,7 @@ int index;
 //post to smart dashboard periodically
 
   }
+
   public double x(){  
     double x = tx.getDouble(0.0);
     return x;
@@ -115,8 +119,15 @@ public void   setPipeline(Integer pipeline) {
   
 
  }
+public double getBestLidar(){
+  return lidar.getDistanceMeter();
+}
+public double[] getAllLidar(){
+  return lidar.getDistanceAll();
+}
 
- static double goalHeightInches;
+
+static double goalHeightInches;
 
 
 
@@ -124,6 +135,7 @@ public void   setPipeline(Integer pipeline) {
   
 return 0;
  }
+
 
  public void updatePose(){
   double[] newpose = botpose.getDoubleArray(empty);
