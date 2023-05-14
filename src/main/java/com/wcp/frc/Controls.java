@@ -8,6 +8,7 @@ import com.wcp.frc.subsystems.Arm;
 import com.wcp.frc.subsystems.Elevator;
 import com.wcp.frc.subsystems.Intake;
 import com.wcp.frc.subsystems.SideElevator;
+import com.wcp.frc.subsystems.SuperStructure;
 import com.wcp.frc.subsystems.Swerve;
 import com.wcp.frc.subsystems.Vision;
 import com.wcp.frc.subsystems.Swerve.State;
@@ -19,21 +20,13 @@ import org.littletonrobotics.junction.Logger;
 // import com.wcp.frc.subsystems.toHuman;
 import com.wcp.frc.subsystems.Aim;
 import com.wcp.frc.subsystems.Lights;
-import com.wcp.frc.subsystems.Scores;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.XboxController;
 
 
 public class Controls {
-    Constants constants = new Constants();
-    Aim aim = new Aim();
-    Scores scores = new Scores();
-    SideElevator sideelevator = new SideElevator();
-    Elevator elevator = new Elevator();
-    Arm arm = new Arm();
-    Intake intake = new Intake();
-    Lights lights = new Lights();
+    SuperStructure s = SuperStructure.getInstance();
 
     double speed;
     
@@ -121,103 +114,9 @@ public class Controls {
         double codDriverDpad = CoDriver.getPOV(); // jacks jacks
         boolean coDriverBackButton = CoDriver.getBackButton();
 
-
-        if (codriverLeftBumperTAP) {
-            if (pick) {// cube
-                pickup = true;
-                pick = false;
-            } else {// cone
-                pickup = true;
-                pick = true;
-            }
+        if(driverRightTrigger>.5){
+            
         }
-   
-        if (driverLeftStickDown) {
-            scores.zero();
-        }
-
-        if (Driver.getBackButtonPressed()) {
-            swerve.zeroSwerve();
-        }
-
-        if (Driver.getStartButtonPressed()) {
-            swerve.parkMode();
-        }
-
-        Acelerator = (1 - (driverLeftTrigger / 2));
-
-        if (coDriverLeftTrigger > .2) {
-            if (pick) {
-                scores.elevatorOffset = 20000;
-            } else {
-
-                scores.elevatorOffset = 15000;
-            }
-
-        } else {
-            scores.elevatorOffset = 0;
-
-        }
-
-        if (coDriverRightY > .2) {
-            scores.armOffset -= 100;
-        }
-
-        if (coDriverRightY < -.2) {
-            scores.armOffset += 100;
-        }
-        if (coDriverBackButton){
-            intake.setIntake();
-        }
-
-
-
-
-        if (coDriverAButton || coDriverBButton || coDriverXButton || coDriverYButton || coDriverBackButton || coDriverLeftStickDown
-                || codriverLeftBumperTAP) {
-
-            scores.setHeight(coDriverAButton, coDriverBButton, coDriverXButton, coDriverYButton, coDriverBackButton, coDriverLeftStickDown,
-                    codriverLeftBumperTAP, cube);
-        }
-
-      
-     
-        if(coDriverRightTrigger>0.5){
-            if(!cube){
-                intake.intake(1,false,false);
-                //intake.setPercentOutput(1.0);
-            }
-            else if (cube){
-            intake.intake(1,true,false);
-            }
-                else{
-            intake.stop();
-        }
-        }
-        if(codriverRightBumper){
-            cube = false;
-         }else if (codriverLeftBumper){
-            cube = true;
-         }
-         
-
-        if (driverRightTrigger>.5) {
-            aim.aimAtScore(cube, driverLeftBumperTAP, driverRightBumperTAP);
-        }else {
-            swerve.sendInput(driverLeftYInput, driverLeftXInput, driverRightXInput);
-        }
-      
-       // vision.getHeight(driverLeftTrigger, driverightTrigger);
-
-        // lights.setLights(codriverRightBumperTAtransformByLeftBumperTAP);
-
-        
-        sim = Pose2d.fromTranslation(sim.getTranslation().translateBy(new Translation2d(driverLeftXInput/5,driverLeftYInput/5)));
-        Logger.getInstance().recordOutput("pose",sim.toWPI());
-        swerve.resetPose(sim);
-    
-
-
 
 }
 }

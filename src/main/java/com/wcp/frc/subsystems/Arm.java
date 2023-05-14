@@ -15,6 +15,15 @@ import com.wcp.frc.Constants;
 import com.wcp.frc.Ports;
 
 public class Arm extends Subsystem {
+
+	public static Arm instance = null;
+
+	public static Arm getInstance(){
+		if(instance == null)
+			instance = new Arm();
+		return instance;
+	}
+	
 	PeriodicIO mPeriodicIO = new PeriodicIO();
 
 	/* Setpoints */

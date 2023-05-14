@@ -44,7 +44,6 @@ public class Aim extends SubsystemBase {
   double Roboty;
   double Robotx;
   Vision vision = Vision.getInstance();
-  Scores scores = Scores.getInstance();
   Gyro pigeon = Pigeon.getInstance();
   double xERROR;
   double yERROR;

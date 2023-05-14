@@ -17,6 +17,14 @@ import com.wcp.frc.Ports;
 
 
 public class SideElevator extends Subsystem {
+
+	public static SideElevator instance = null;
+
+	public static SideElevator getInstance(){
+		if(instance == null)
+			instance = new SideElevator();
+		return instance;
+	}
 	PeriodicIO mPeriodicIO = new PeriodicIO();
 
 	/* Setpoints */
@@ -70,6 +78,7 @@ public class SideElevator extends Subsystem {
 			side.setSelectedSensorPosition(0, Constants.kPIDLoopIdx, Constants.TIMEOUT_MILLISECONDS);
 			
 }
+
   
 
 

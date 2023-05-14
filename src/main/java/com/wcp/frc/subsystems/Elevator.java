@@ -17,6 +17,15 @@ import com.wcp.frc.Ports;
 
 
 public class Elevator extends Subsystem {
+
+	public static Elevator instance = null;
+
+	public static Elevator getInstance(){
+		if(instance == null)
+			instance = new Elevator();
+		return instance;
+	}
+
 	PeriodicIO mPeriodicIO = new PeriodicIO();
 	/* Setpoints */
 	double mTargetMin = 800;//500

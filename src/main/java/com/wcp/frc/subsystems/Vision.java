@@ -19,8 +19,7 @@ import com.wcp.lib.geometry.Translation2d;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class Vision extends SubsystemBase {
-  Lidar lidar = new Lidar(Ports.lidars);
+public class Vision extends Subsystem {
   double[] empty = {0.0,0.0,0.0,0.0,0.0,0.0};
   NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
 NetworkTableEntry tx = table.getEntry("tx");
@@ -119,12 +118,6 @@ public void   setPipeline(Integer pipeline) {
   
 
  }
-public double getBestLidar(){
-  return lidar.getDistanceMeter();
-}
-public double[] getAllLidar(){
-  return lidar.getDistanceAll();
-}
 
 
 static double goalHeightInches;
@@ -143,13 +136,21 @@ return 0;
  }
 
 
- @Override
- public void periodic() {
-   // This method will be called once per scheduler run
-   SmartDashboard.putNumber("LimelightX", x());
+
+
+@Override
+public void outputTelemetry() {
+     SmartDashboard.putNumber("LimelightX", x());
    SmartDashboard.putNumber("LimelightY", y());
    SmartDashboard.putNumber("LimelightArea", area());
    SmartDashboard.putNumber("ranges", range(0));
- }
+  
+}
+
+@Override
+public void stop() {
+  // TODO Auto-generated method stub
+  
+}
 
 }

@@ -275,6 +275,7 @@ modules = Arrays.asList(frontRightModule, frontLeftModule, rearLeftModule, rearR
 		pose = updatedPose;
 		modules.forEach((m) -> m.resetPose(pose));
 	}
+    
 
     public void resetPose(Pose2d newPose){
 
